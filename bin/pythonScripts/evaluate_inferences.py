@@ -1,10 +1,8 @@
-import Chr_kmer_Informative_SNPs_Haploid_HMM as HMM
+import argparse
 
-import numpy as np
 import pandas as pd
 
-import argparse
-import pdb
+from bin.pythonScripts import Chr_kmer_Informative_SNPs_Haploid_HMM as HMM
 
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('--inferences_filename', help='path to VCF file containing inferences', required=True)

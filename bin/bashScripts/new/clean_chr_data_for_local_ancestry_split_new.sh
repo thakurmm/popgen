@@ -1,29 +1,50 @@
-#!/bin/bash/
+#!/bin/bash
 
+# This script must be executed from the popgen folder.
+
+# @ToDo: Why do we have the variable names as train, test1 and test2. Why not pop1, pop2 and pop3 ?
+# @ToDo: Handle the linkage of pop input to the SampleIDs files so it is not always ASW_CEU_YRI
 train="ASW"
 test1="CEU"
 test2="YRI"
 
-pops="$train_$test1_$test2"
+pops="${train}_${test1}_${test2}"
 
+# sample_ids_file="SampleIDs/${pops}_IDs.txt"
+# vcf_folder="data/vcf"
+# @ToDo Merge the output/ and pops_data symlink
+pops_folder_base="pops_data/${pops}_Data"
+
+# for i in {1..22}
 for (( i=22; i<=22; i++ )); do
 	echo "###### Analyzing Chr$i ######"
+	chr_folder_loc="${pops_folder_base}/Chr${i}"
 
-	chr_folder_loc=/Users/gjohnston9/Documents/popgen/"$pops"_Data/Chr"$i"
-	mkdir "$chr_folder_loc"/tmp
-	tmp_folder_loc="$chr_folder_loc"/tmp
-	cd "$chr_folder_loc"
+	tmp_folder=${chr_folder_loc}/tmp
+	if [ ! -d $tmp_folder ]; then
+	    mkdir -p $tmp_folder
+	fi
 
-	#### Select samples (from relevant populations) with MAF > 0.05, biallelic, no singletons, thin by 10k
-	# vcftools --vcf "$chr_folder_loc"/chr"$i".phase3."$pops".SNPs.recode.vcf --min-alleles 2 --max-alleles 2 --non-ref-ac 2 --remove-indels --maf 0.05 --recode --out "$tmp_folder_loc"/chr"$i"."$pops".SNPs ### this is done in previous script
-	sed -i.bak 's/#CHROM/CHROM/g' "$chr_folder_loc"/chr"$i".phase3."$pops".SNPs.recode.vcf
-	grep '#' "$chr_folder_loc"/chr"$i".phase3."$pops".SNPs.recode.vcf > "$tmp_folder_loc"/chr"$i"."$pops".header.txt
-	echo "###### Completed filtering ######"
+	# cd $chr_folder_loc
+
+	orig_chr_recoded_vcf="${chr_folder_loc}/chr${i}.phase3.${pops}.SNPs.recode.vcf"
+	working_chr_recoded_vcf="${tmp_folder}/chr${i}.phase3.${pops}.SNPs.recode.vcf"
+	tmp_chr_header_file="${tmp_folder}/chr${i}.phase3.${pops}.header.txt"
+
+    # @ToDo: What is the need for removing the # from the CHROM entry in the vcf file?
+    # This command copies the (vcf file) to (vcf file).bak before removing the "#" from "#CHROM" in (vcf file)
+    # @ToDo: Do we need to do the two lines below in the select_populations script?
+	sed 's/#CHROM/CHROM/g' $orig_chr_recoded_vcf > $working_chr_recoded_vcf
+	grep '#' $working_chr_recoded_vcf > $tmp_chr_header_file
 
 	#### Split phased chromosomes
 	# Rscript /Users/gjohnston9/Documents/popgen/split_homologous_chr.R "$chr_folder_loc"/chr"$i".phase3."$pops".SNPs.recode.vcf
-	python3 /Users/gjohnston9/Documents/popgen/split_homologous_chr.py "$chr_folder_loc"/chr"$i".phase3."$pops".SNPs.recode.vcf
+	python3 bin/pythonScripts/split_homologous_chr.py $working_chr_recoded_vcf
+
+	allele_filename=$(echo $working_chr_recoded_vcf | sed 's?recode.vcf?homologous.txt?g')
+	homologous_filename=$(echo $working_chr_recoded_vcf | sed 's?recode.vcf?homologous.vcf?g')
 	echo "finished running Python script"
+exit
 	cat "$tmp_folder_loc"/chr"$i"."$pops".header.txt "$chr_folder_loc"/chr"$i".phase3."$pops".SNPs.homologous.vcf > "$tmp_folder_loc"/chr"$i"."$pops".SNPs.homologous.header.vcf
 	echo "finished something else"
 	sed 's/CHROM/#CHROM/g' "$tmp_folder_loc"/chr"$i"."$pops".SNPs.homologous.header.vcf > "$chr_folder_loc"/chr"$i"."$pops".SNPs.homologous.header.vcf

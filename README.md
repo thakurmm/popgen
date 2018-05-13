@@ -92,13 +92,15 @@ Data downloaded from the [1000 Genomes Project](http://www.internationalgenome.o
 #### Data Sources ####
 - The file popgen/pops_for_sample_IDs.tsv can be downloaded from http://www.internationalgenome.org/data-portal/sample . Select the populations of interest (YRI, CEU and ASW) from the checkboxes, and then select the option to "Download the list" at the top of the page.
 	- Rename the file as pops_for_sample_IDs.tsv
+- The input data files for the vcftools command can be downloaded from http://hgdownload.cse.ucsc.edu/gbdb/hg19/1000Genomes/phase3/ or ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/
+    - As mentioned on this page, the VCF files produced by the final phase of the 1000 Genomes Project (phase 3) are phased (http://www.internationalgenome.org/faq/are-1000-genomes-variant-calls-phased/)
+
 
 #### Tools used ####
 - vcftools
-    git clone https://github.com/vcftools/vcftools.git
-    cd vcftools
-    ./autogen.sh
-    ./configure
-    make
-    make install
--
+    - git clone https://github.com/vcftools/vcftools.git
+    - cd vcftools
+    - ./autogen.sh
+    - ./configure
+    - make
+    - make install

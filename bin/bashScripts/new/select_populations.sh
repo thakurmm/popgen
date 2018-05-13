@@ -30,9 +30,11 @@ for (( i=22; i<=22; i++ )); do
 
     output_snps_filename="chr${i}.phase3.${pops}.SNPs"
 
+    # If we need the "Info" data from the input vcf in the output vcf file, see https://sourceforge.net/p/vcftools/mailman/message/32285447/
+    # You add --recode-INFO-all to the options below
+    # Select samples (from relevant populations) with MAF > 0.05, biallelic, no singletons, thin by 10k
     vcftools  --gzvcf "${vcf_folder}/${input_vcf_filename}" \
                 --keep ${sample_ids_file} \
                 --min-alleles 2 --max-alleles 2 --non-ref-ac 2 --remove-indels --maf 0.05 --recode \
                 --out "${out_folder_loc}/${output_snps_filename}"
 done
-

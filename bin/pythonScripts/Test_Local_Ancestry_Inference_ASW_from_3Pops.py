@@ -30,17 +30,15 @@
 # - do some more profiling
 # - rename files to sensible titles
 
-import Chr_kmer_Informative_SNPs_Haploid_HMM as HMM
+import argparse
+import itertools
+import os
+import time
 
 import numpy as np
 import pandas as pd
 
-import argparse
-import itertools
-import os
-import pdb
-import random
-import time
+from bin.pythonScripts import Chr_kmer_Informative_SNPs_Haploid_HMM as HMM
 
 pd.set_option('display.float_format', lambda x: '%.4f' % x)
 
