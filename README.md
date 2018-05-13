@@ -92,3 +92,12 @@ Data downloaded from the [1000 Genomes Project](http://www.internationalgenome.o
 #### Data Sources ####
 - The file popgen/pops_for_sample_IDs.tsv can be downloaded from http://www.internationalgenome.org/data-portal/sample . Select the populations of interest (YRI, CEU and ASW) from the checkboxes, and then select the option to "Download the list" at the top of the page.
 	- Rename the file as pops_for_sample_IDs.tsv
+
+#### Tools used ####
+- vcftools
+    git clone https://github.com/vcftools/vcftools.git
+    cd vcftools
+    ./autogen.sh
+    ./configure
+    make
+    make install
