@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="f12c614c-61cd-46af-92e7-f3ccd4403beb" name="Default" comment="Copying the files - initial version">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/Johnston_Greg.pdf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/Johnston_PURA_grant_proposal_JLedit.docx" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/Kitty23andmeAncestry.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/PURA_the_good_one.odt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/SMBE GAP 2016 painting poster.jpg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/SMBE GAP 2016 painting poster.pdf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/admix/100admixed_20totalpure.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/admix/100admixed_30totalpure.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/admix/100admixed_40totalpure.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/admix/200admixed_20totalpure.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/admix/200admixed_30totalpure.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/admix/200admixed_40totalpure.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/admix/200admixed_80totalpure.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/admix/250admixed_20totalpure.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/admix/300admixed_20totalpure.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/admix/300admixed_30totalpure.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/admix/300admixed_40totalpure.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/admix/350admixed_20totalpure.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/admix/400admixed_20totalpure.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/admix/400admixed_30totalpure.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/admix/400admixed_40totalpure.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/admix/500admixed_0totalpure.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/admix/500admixed_100totalpure.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/admix/500admixed_200totalpure.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/admix/500admixed_20totalpure.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/admix/500admixed_40totalpure.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/admix/r_squared_results.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/better_output (copy).png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/informative_SNP_density2.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/informative_SNPs.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/only_informative_SNPs.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/only_uninformative_SNPs.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/etc/window_size_vs_accuracy_and_runtime.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/chr22.Test.LA.ASW_Only.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/dumps/lai/results.bson" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/plot2.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/plot_5chroms.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/plot_5chroms_try2.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/plot_5chroms_try2point5.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/ASW_CEU_YRI/100admixed_40pure_with_sliding_windows_results_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/ASW_CEU_YRI/500admixed_100pure_with_sliding_windows_results_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/ASW_CEU_YRI/eight_switches_k=5_pops=ASW_CEU_YRI_train=100admixed_20pure_with_sliding_windows_results_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/ASW_CEU_YRI/eight_switches_k=5_pops=ASW_CEU_YRI_train=100admixed_40pure_with_sliding_windows_results_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/ASW_CEU_YRI/eight_switches_k=5_pops=ASW_CEU_YRI_train=200admixed_40pure_with_sliding_windows_results_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/ASW_CEU_YRI/eight_switches_k=5_pops=ASW_CEU_YRI_train=200admixed_80pure_with_sliding_windows_results_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/ASW_CEU_YRI/eight_switches_k=5_pops=ASW_CEU_YRI_train=500admixed_100pure_with_sliding_windows_results_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/ASW_CEU_YRI/eight_switches_k=5_pops=ASW_CEU_YRI_train=500admixed_200pure_with_sliding_windows_results_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/ASW_CEU_YRI/eight_switches_k=5_pops=ASW_CEU_YRI_with_sliding_windows_results_plot_new_version.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/ASW_CEU_YRI/eight_switches_k=5_pops=ASW_CEU_YRI_with_sliding_windows_results_train_n=100_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/ASW_CEU_YRI/eight_switches_k=5_pops=ASW_CEU_YRI_with_sliding_windows_results_train_n=200_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/ASW_CEU_YRI/eight_switches_k=5_pops=ASW_CEU_YRI_with_sliding_windows_results_train_n=500_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/ASW_CEU_YRI/eight_switches_k=5_pops=CEU_YRI_with_sliding_windows_results_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/eight_switches_k=10_results_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/eight_switches_k=11_results_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/eight_switches_k=2_results_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/eight_switches_k=3_results_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/eight_switches_k=4_results_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/eight_switches_k=5_no_sliding_windows_results_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/eight_switches_k=5_results_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/eight_switches_k=5_with_sliding_windows_results_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/eight_switches_k=6_results_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/eight_switches_k=6_with_sliding_windows_results_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/eight_switches_k=7_results_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/eight_switches_k=8_results_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/eight_switches_k=9_results_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/window_size_vs_accuracy_and_runtime.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/source=CEU_YRI_admixed_200admixed_40pure_homologous.vcf_test=CEU_YRI_test_cases_chrom_try2.csv_with_sliding_windows_results_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/source=CEU_YRI_admixed_200admixed_40pure_homologous.vcf_test=chr22.phase3.ASW_CEU_YRI.SNPs.homologous.txt_with_sliding_windows_results_plot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/rfmix/CEU_YRI_10admixed_300pure.vcf" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/popgen.iml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Chr_kmer_Informative_SNPs_Haploid_HMM.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleIDs/ASW_CEU_YRI_IDs.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleIDs/ASW_Sample_IDs_haploid.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleIDs/CEU_Sample_IDs_haploid.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleIDs/CEU_YRI_IDs.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleIDs/GBR_ASW_CEU_YRI_IDs.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleIDs/GBR_Sample_IDs_haploid.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleIDs/Reference_ID_for_Test_Sequences.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleIDs/YRI_Sample_IDs_haploid.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleIDs/pops_for_sample_IDs.tsv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/SampleIDs/write_sample_IDs.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Test_Local_Ancestry_Inference_ASW_from_3Pops.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/__init__.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/bin/RScripts/Chr_kmer_InformativeSNPs_Haploid_HMM.R" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/bin/RScripts/Test_LAI_ASW_from_3Pops_SlidingWindows.R" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/bin/RScripts/Test_Local_Ancestry_Inference_ASW_from_3Pops.R" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/bin/RScripts/split_homologous_chr.R" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/bin/RScripts/test.R" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/bin/bashScripts/Select_ASW_CEU_YRI_Seqs.sh" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/bin/bashScripts/Test_LAI_ASW_from_3Pops_SlidingWindows.sh" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/bin/bashScripts/Test_Local_Ancestry_Inference_ASW_from_3Pops.sh" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/bin/bashScripts/clean_chr_data_for_local_ancestry_split.sh" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/bin/bashScripts/new/clean_chr_data_for_local_ancestry_split_new.sh" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/bin/bashScripts/new/select_populations.sh" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/create_admixed_chromosomes.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/create_all_admixed_chromosomes.sh" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/chr22.phase3.ASW_CEU_YRI.SNPs.homologous_trimmed40rows_10samples.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/evaluate_inferences.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/evaluate_inferences.sh" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/generate_rfmix_input.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/generate_rfmix_input.sh" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/generate_test_set.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/README.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/genetic_map_GRCh37_chr1.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/genetic_map_GRCh37_chr10.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/genetic_map_GRCh37_chr11.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/genetic_map_GRCh37_chr12.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/genetic_map_GRCh37_chr13.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/genetic_map_GRCh37_chr14.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/genetic_map_GRCh37_chr15.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/genetic_map_GRCh37_chr16.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/genetic_map_GRCh37_chr17.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/genetic_map_GRCh37_chr18.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/genetic_map_GRCh37_chr19.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/genetic_map_GRCh37_chr2.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/genetic_map_GRCh37_chr20.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/genetic_map_GRCh37_chr21.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/genetic_map_GRCh37_chr22.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/genetic_map_GRCh37_chr3.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/genetic_map_GRCh37_chr4.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/genetic_map_GRCh37_chr5.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/genetic_map_GRCh37_chr6.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/genetic_map_GRCh37_chr7.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/genetic_map_GRCh37_chr8.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/genetic_map_GRCh37_chr9.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/genetic_map_GRCh37_chrX.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/genetic_map_GRCh37_chrX_par1.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genetic_map/genetic_map_GRCh37_chrX_par2.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/learning_samples/pandas_dataframe.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/learning_samples/test_lambda.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/learning_samples/test_print.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/old/Chr_kmer_InformativeSNPs_Haploid_HMM.R" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/old/Test_Local_Ancestry_Inference.R" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/old/split_homologous_chr.R" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/plot_admix_results.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/plot_results.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/chr22.Test.LA.ASW_Only.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/dumps/lai/results.metadata.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/ASW_CEU_YRI/eight_switches_k=5_pops=ASW_CEU_YRI_train=100admixed_20pure_with_sliding_windows_results.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/ASW_CEU_YRI/eight_switches_k=5_pops=ASW_CEU_YRI_train=100admixed_40pure_with_sliding_windows_results.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/ASW_CEU_YRI/eight_switches_k=5_pops=ASW_CEU_YRI_train=200admixed_40pure_with_sliding_windows_results.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/ASW_CEU_YRI/eight_switches_k=5_pops=ASW_CEU_YRI_train=200admixed_80pure_with_sliding_windows_results.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/ASW_CEU_YRI/eight_switches_k=5_pops=ASW_CEU_YRI_train=500admixed_100pure_with_sliding_windows_results.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/ASW_CEU_YRI/eight_switches_k=5_pops=ASW_CEU_YRI_train=500admixed_200pure_with_sliding_windows_results.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/ASW_CEU_YRI/eight_switches_k=5_pops=ASW_CEU_YRI_with_sliding_windows_results_new_version.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/eight_switches_k=2_results.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/eight_switches_k=3_results.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/eight_switches_k=5_with_sliding_windows_results.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/eight_switches_k=6_with_sliding_windows_results.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/sliding_windows/summary.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/source=CEU_YRI_admixed_200admixed_40pure_homologous.vcf_test=CEU_YRI_test_cases_chrom.csv.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/source=CEU_YRI_admixed_200admixed_40pure_homologous.vcf_test=CEU_YRI_test_cases_chrom.csv_with_sliding_windows_results.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/source=CEU_YRI_admixed_200admixed_40pure_homologous.vcf_test=CEU_YRI_test_cases_chrom_try2.csv.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/source=CEU_YRI_admixed_200admixed_40pure_homologous.vcf_test=CEU_YRI_test_cases_chrom_try2.csv_with_sliding_windows_results.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/results/source=CEU_YRI_admixed_200admixed_40pure_homologous.vcf_test=chr22.phase3.ASW_CEU_YRI.SNPs.homologous.txt_with_sliding_windows_results.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/rfmix/CEU_YRI_10admixed_300pure_proportions.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/rfmix/alleles_CEU_YRI_10admixed_300pure.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/rfmix/classes_CEU_YRI_10admixed_300pure.txt" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/split_homologous_chr.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test_ancestry.sh" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test_input/CEU_YRI_test_cases_chrom.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test_input/CEU_YRI_test_cases_chrom_try2.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test_input/CEU_YRI_test_cases_true_ancestry.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test_input/CEU_YRI_test_cases_true_ancestry_try2.csv" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+    </list>
+    <ignored path="popgen.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="popgen" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="y" value="23" />
+    <option name="width" value="1680" />
+    <option name="height" value="971" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="popgen" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="popgen" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="popgen" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="settings.editor.selected.configurable" value="settings.github" />
+    <property name="settings.editor.splitter.proportion" value="0.2" />
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="popgen" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="popgen" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Attests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="popgen" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="popgen" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Nosetests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="popgen" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Unittests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="popgen" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PUREUNITTEST" value="true" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="py.test">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="popgen" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="testToRun" value="" />
+      <option name="keywords" value="" />
+      <option name="params" value="" />
+      <option name="USE_PARAM" value="false" />
+      <option name="USE_KEYWORD" value="false" />
+      <method />
+    </configuration>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f12c614c-61cd-46af-92e7-f3ccd4403beb" name="Default" comment="" />
+      <created>1526172880432</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1526172880432</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="23" width="1680" height="971" extended-state="0" />
+    <editor active="false" />
+    <layout>
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3292683" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Copying the files - initial version" />
+    <option name="LAST_COMMIT_MESSAGE" value="Copying the files - initial version" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+</project>
