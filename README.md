@@ -98,9 +98,13 @@ Data downloaded from the [1000 Genomes Project](http://www.internationalgenome.o
 
 #### Tools used ####
 - vcftools
+    - Install XCode Command Line Tools from developer.apple.com
+    - brew install pkg-config
     - git clone https://github.com/vcftools/vcftools.git
     - cd vcftools
     - ./autogen.sh
     - ./configure
     - make
     - make install
+- vcftools install (if the above method fails)
+    - brew install vcftools
