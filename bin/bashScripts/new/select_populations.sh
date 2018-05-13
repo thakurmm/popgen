@@ -1,5 +1,5 @@
 #!/bin/bash
-
+echo "Script ${0} Start Time: $(date)"
 # This script is expected to be run from the top "popgen" folder.
 
 # The input data files for the vcftools command can be downloaded from http://hgdownload.cse.ucsc.edu/gbdb/hg19/1000Genomes/phase3/
@@ -38,3 +38,4 @@ for (( i=22; i<=22; i++ )); do
                 --min-alleles 2 --max-alleles 2 --non-ref-ac 2 --remove-indels --maf 0.05 --recode \
                 --out "${out_folder_loc}/${output_snps_filename}"
 done
+echo "Script ${0} End Time: $(date)"
