@@ -1,4 +1,5 @@
 #!/bin/bash
+# This script takes ~7 minutes to run for chromosome 22
 echo "Script ${0} Start Time: $(date)"
 # This script is expected to be run from the top "popgen" folder.
 
