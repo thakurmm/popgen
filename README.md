@@ -96,7 +96,6 @@ ALL scripts below must be run from the top level `popgen` folder
 - The input data files for the vcftools command can be downloaded from http://hgdownload.cse.ucsc.edu/gbdb/hg19/1000Genomes/phase3/ or ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/
     - As mentioned on this page, the VCF files produced by the final phase of the 1000 Genomes Project (phase 3) are phased (http://www.internationalgenome.org/faq/are-1000-genomes-variant-calls-phased/)
 
-
 #### Tools used ####
 - vcftools
     - Install XCode Command Line Tools from developer.apple.com
@@ -109,3 +108,7 @@ ALL scripts below must be run from the top level `popgen` folder
     - make install
 - vcftools install (if the above method fails)
     - brew install vcftools
+- admixture install
+    - Download from the admixture website, the MacOS binary and uncompress it
+    - Make a symlink to admixture in your /usr/local/bin so it is in your $PATH
+    - Admixture manual - https://www.genetics.ucla.edu/software/admixture/admixture-manual.pdf

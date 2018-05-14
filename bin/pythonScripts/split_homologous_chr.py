@@ -19,7 +19,7 @@ with open(in_filename, 'r') as in_file, open(allele_filename, 'w') as allele_fil
                 header_found = True ### mark header as found
                 line_list = line.split() ### header: NA001 NA002
 
-                header_line = '\t'.join(line_list[0:8])
+                header_line = '\t'.join(line_list[0:9])
                 # For each Sample_Id (NA001), make two entries (NA001_1 and NA001_2)
                 for col in line_list[9:]:
                     header_line = header_line + '\t' + col + "_1"
@@ -30,7 +30,7 @@ with open(in_filename, 'r') as in_file, open(allele_filename, 'w') as allele_fil
             else:
                 line_list = line.split() ### Data line
 
-                data_line = '\t'.join(line_list[0:8])
+                data_line = '\t'.join(line_list[0:9])
                 # For each allele freq separated by |, we have two singlets, "0|1" is now "0 <tab> 1"
                 for col in line_list[9:]:
                     allele_freq = col.split('|')    ### Split 0|1 into [0, 1]
@@ -39,7 +39,7 @@ with open(in_filename, 'r') as in_file, open(allele_filename, 'w') as allele_fil
 
                 allele_file.write(data_line + '\n') ### 0 0 0 1
 
-                data_line = '\t'.join(line_list[0:8])
+                data_line = '\t'.join(line_list[0:9])
                 # For each allele freq separated by |, we have two pairs, "0|1" is now "0|0 <tab> 1|1"
                 for col in line_list[9:]:
                     allele_freq = col.split('|')    ### Split 0|1 into [0, 1]

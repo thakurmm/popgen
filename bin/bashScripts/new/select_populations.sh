@@ -36,7 +36,7 @@ for (( i=22; i<=22; i++ )); do
     # Select samples (from relevant populations) with MAF > 0.05, biallelic, no singletons, thin by 10k
     vcftools  --gzvcf "${vcf_folder}/${input_vcf_filename}" \
                 --keep ${sample_ids_file} \
-                --min-alleles 2 --max-alleles 2 --non-ref-ac 2 --remove-indels --maf 0.05 --recode \
+                --min-alleles 2 --max-alleles 2 --non-ref-ac 2 --remove-indels --maf 0.05 --recode --recode-INFO-all \
                 --out "${out_folder_loc}/${output_snps_filename}"
 done
 echo "Script ${0} End Time: $(date)"
