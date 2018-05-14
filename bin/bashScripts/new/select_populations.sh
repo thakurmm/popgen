@@ -14,7 +14,7 @@ test2="YRI"
 pops="${train}_${test1}_${test2}"
 
 vcf_folder="data/vcf"
-out_folder_base="output/${pops}_Data"
+out_folder_base="pops_data/${pops}_Data"
 sample_ids_file="SampleIDs/${pops}_IDs.txt"
 
 # for i in {1..22}
