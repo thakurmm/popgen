@@ -4,10 +4,13 @@ Need to install [admixture](https://www.genetics.ucla.edu/software/admixture/), 
 #### Prepare data ####
 Data downloaded from the [1000 Genomes Project](http://www.internationalgenome.org/data) - specifically, this ftp directory: ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/
 
+ALL scripts below must be run from the top level `popgen` folder
+
 1. Extract sample IDs.
-	- Run the python script `SampleIDs/write_sampleIDs.py ASW CEU YRI` from this directory
+	- Run the python script `SampleIDs/write_sampleIDs.py SamplesIDs/pops_for_sample_IDs.tsv ASW CEU YRI`
 		- Input data:
-			- In SampleIDs: `pops_for_sample_IDs.tsv`
+			- List of SampleIDs: `SampleIDs/pops_for_sample_IDs.tsv`
+			- Specify population IDs: `ASW` `CEU` `YRI`
 		- Output (in SampleIDs folder):
 			- `ASW_CEU_YRI_IDs.txt`
 			- `ASW_Sample_IDs_haploid.txt`
@@ -15,8 +18,7 @@ Data downloaded from the [1000 Genomes Project](http://www.internationalgenome.o
 			- `YRI_Sample_IDs_haploid.txt`
 
 2. Select out populations of interest: ASW, CEU, and YRI.
-	- Use the bash script (in bin folder): `Select_ASW_CEU_YRI_Seqs.sh`
-		- 2018 update: Instead, use `select_populations.sh` from `bin/bashScripts/new/`. This does the same thing but is part of an effort to make scripts more flexible with regards to which populations they are looking at.
+	- Use the bash script (in bin/bashScripts/new folder): `select_populations.sh`.
 		- Calls:
 			- vcftools
 	- Input data:
@@ -25,10 +27,9 @@ Data downloaded from the [1000 Genomes Project](http://www.internationalgenome.o
 	- Output: `chr22.phase3.ASW_CEU_YRI.SNPs.recode.vcf`, `chr22.phase3.ASW_CEU_YRI.SNPs.log`
 
 3. Split the phased chromosomes into separate chromosomes
-	- Use the bash script (in bin folder): `clean_chr_data_for_local_ancestry_split.sh`
-	- 2018 update: Like with the previous step, use `bin/bashScripts/clean_chr_data_for_local_ancestry_split_new.sh` instead.
+	- Use the bash script (in bin/bashScripts/new folder): `clean_chr_data_for_local_ancestry_split_new.sh`
 		- Calls:
-			- Python script (in bin folder): `split_homologous_chr.py`
+			- Python script (in bin/PythonScripts folder): `split_homologous_chr.py`
 			- admixture
 			- plink2
 			- vcftools
