@@ -16,7 +16,8 @@ filename = '_'.join(pops) + '_IDs.txt'
 # pd.read_csv() return a pandas DataFrame object
 input_df = pd.read_csv(input_samples_filename, sep='\t')
 
-# The line below will filter the items read above, so as to only include entries where Population code column is one of the codes entered as "pops" argument above.
+# The line below will filter the items read above, so as to only include entries where Population code column
+# is one of the codes entered as "pops" argument above.
 # See learning_samples/pandas_dataframe.py to see how this works
 filtered_df = input_df[input_df['Population code'].isin(pops)]
 filtered_sample_name_df = filtered_df['Sample name']
