@@ -1,6 +1,7 @@
 from sys import argv
 import time
 
+# Called from: clean_chr_data_for_local_ancestry_split_new.sh
 # This script must be executed from the popgen folder.
 # This script takes roughly two minutes to run.
 

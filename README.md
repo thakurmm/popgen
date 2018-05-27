@@ -112,3 +112,8 @@ ALL scripts below must be run from the top level `popgen` folder
     - Download from the admixture website, the MacOS binary and uncompress it
     - Make a symlink to admixture in your /usr/local/bin so it is in your $PATH
     - Admixture manual - https://www.genetics.ucla.edu/software/admixture/admixture-manual.pdf
+
+- New ToDos
+    - @ToDo The vcftools command below is simply comverting the vcf file to a tped file format. Why do we need this if plink --vcf can accept a vcf file directly as input.
+    - @ToDo Probably this is done because --vcf option is only available in plink 1.9 (not plink 1.07).
+    - @ToDo Switch using plink 1.9 and eliminate the need for tped file generation
