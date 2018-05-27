@@ -39,8 +39,9 @@ for (( i=22; i<=22; i++ )); do
 	# Output: pops_data/ASW_CEU_YRI_Data/Chr22/tmp/chr22.phase3.ASW_CEU_YRI.SNPs.recode.vcf
 	python3 bin/pythonScripts/split_homologous_chr.py $working_chr_recoded_vcf
 
-	allele_filename=$(echo $working_chr_recoded_vcf | sed 's?recode.vcf?homologous.txt?g')
-	homologous_filename=$(echo $working_chr_recoded_vcf | sed 's?recode.vcf?homologous.vcf?g')
+    # The two files below will be created in chr_folder_loc folder
+	allele_filename=$(echo $orig_chr_recoded_vcf | sed 's?recode.vcf?homologous.txt?g')
+	homologous_filename=$(echo $orig_chr_recoded_vcf | sed 's?recode.vcf?homologous.vcf?g')
 	echo "finished running Python script"
 
 	# What we have so far
