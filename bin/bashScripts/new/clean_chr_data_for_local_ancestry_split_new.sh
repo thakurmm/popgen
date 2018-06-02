@@ -40,8 +40,8 @@ for (( i=22; i<=22; i++ )); do
 	python3 bin/pythonScripts/split_homologous_chr.py $working_chr_recoded_vcf
 
     # The two files below will be created in chr_folder_loc folder
-	allele_filename=$(echo $orig_chr_recoded_vcf | sed 's?recode.vcf?homologous.txt?g')
-	homologous_filename=$(echo $orig_chr_recoded_vcf | sed 's?recode.vcf?homologous.vcf?g')
+	allele_filename=$(echo $working_chr_recoded_vcf | sed 's?recode.vcf?homologous.txt?g')
+	homologous_filename=$(echo $working_chr_recoded_vcf | sed 's?recode.vcf?homologous.vcf?g')
 	echo "finished running Python script"
 
 	# What we have so far
