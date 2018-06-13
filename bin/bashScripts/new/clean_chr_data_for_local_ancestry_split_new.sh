@@ -40,7 +40,7 @@ for (( i=22; i<=22; i++ )); do
 	python3 bin/pythonScripts/split_homologous_chr.py $working_chr_recoded_vcf
 
     # The two files below will be created in chr_folder_loc folder
-	allele_filename=$(echo $working_chr_recoded_vcf | sed 's?recode.vcf?homologous.txt?g')
+	allele_filename=$(echo $working_chr_recoded_vcf | sed 's?recode.vcf?allele.vcf?g')
 	homologous_filename=$(echo $working_chr_recoded_vcf | sed 's?recode.vcf?homologous.vcf?g')
 	echo "finished running Python script"
 
@@ -58,6 +58,7 @@ for (( i=22; i<=22; i++ )); do
     # And, we add the (hash) in front of CHROM to rebuilt the vcf file after the changes made by the pythonscript above.
 	homologous_filepath_with_header="${chr_folder_loc}/chr${i}.${pops}.SNPs.homologous.withHeader.vcf"
 	sed 's/CHROM/#CHROM/g' ${tmp_homologous_filepath_with_header} > ${homologous_filepath_with_header}
+	sed 's/CHROM/#CHROM/g' ${allele_filename} > ${chr_folder_loc}/chr${i}.phase3.${pops}.SNPs.allele.vcf
 	echo "###### Finished splitting phased chromosomes ######"
 
     # @ToDo The vcftools command below is simply comverting the vcf file to a tped file format. Why do we need this if plink --vcf can accept a vcf file directly as input.

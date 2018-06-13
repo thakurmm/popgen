@@ -7,7 +7,9 @@ Data downloaded from the [1000 Genomes Project](http://www.internationalgenome.o
 ALL scripts below must be run from the top level `popgen` folder
 
 1. Extract sample IDs.
-	- Run the python script `SampleIDs/write_sampleIDs.py SamplesIDs/pops_for_sample_IDs.tsv ASW CEU YRI`
+
+The pops_for_sample_IDS.tsv file contains the populations across all populations AND across all phases.
+	- Run the python script `python bin/pythonScripts/write_sample_IDs.py SampleIDs/pops_for_sample_IDs.tsv ASW CEU YRI`
 		- Input data:
 			- List of SampleIDs: `SampleIDs/pops_for_sample_IDs.tsv`
 			- Specify population IDs: `ASW` `CEU` `YRI`
@@ -18,7 +20,12 @@ ALL scripts below must be run from the top level `popgen` folder
 			- `YRI_Sample_IDs_haploid.txt`
 
 2. Select out populations of interest: ASW, CEU, and YRI.
-	- Use the bash script (in bin/bashScripts/new folder): `select_populations.sh`.
+    In this script, we are taking only the phase3 data for ALL the populations, and extracting the phase3 data
+     for the populations for which we extracted the IDs in the previous step, in (pops)_ID.txt file.
+     The output file is a combined file across ALL the populations of interest. The breakup of this file into
+     the individual populations is done in a later step.
+	- Use the bash script: `bin/bashScripts/new/select_populations.sh`.
+	    - Script runtime for Chr22: about 8 minutes.
 		- Calls:
 			- vcftools
 	- Input data:
@@ -27,7 +34,9 @@ ALL scripts below must be run from the top level `popgen` folder
 	- Output: `chr22.phase3.ASW_CEU_YRI.SNPs.recode.vcf`, `chr22.phase3.ASW_CEU_YRI.SNPs.log`
 
 3. Split the phased chromosomes into separate chromosomes
-	- Use the bash script (in bin/bashScripts/new folder): `clean_chr_data_for_local_ancestry_split_new.sh`
+    This script just operates on the "combined" vcf file generated above
+    - Script runtime for Chr22: about 10 minutes
+	- Use the bash script: `bin/bashScripts/new/clean_chr_data_for_local_ancestry_split_new.sh`
 		- Calls:
 			- Python script (in bin/PythonScripts folder): `split_homologous_chr.py`
 			- admixture
@@ -43,6 +52,8 @@ ALL scripts below must be run from the top level `popgen` folder
 		- `chr22.phase3.ASW_CEU_YRI.SNPs.homologous.txt`
 
 4. Run `create_admixed_chromosomes` to parse the output of `split_homologous_chr.py` (which is called as part of the previous step) and create an admixed training set.
+    In this script, we will be breaking up the "combined" vcf file from the previous step, into multiple VCF files per population of interest.
+    This is where we use the list of sampleIds per population created in the 1st step above.
 	- Input data:
 		- In `SampleIDs/` directory: two lists of sample IDs, one for each training population.
 		- In `data/` directory: source of genetic data, e.g. `chr22.phase3.ASW_CEU_YRI.SNPs.homologous.txt`
@@ -117,3 +128,4 @@ ALL scripts below must be run from the top level `popgen` folder
     - @ToDo The vcftools command below is simply comverting the vcf file to a tped file format. Why do we need this if plink --vcf can accept a vcf file directly as input.
     - @ToDo Probably this is done because --vcf option is only available in plink 1.9 (not plink 1.07).
     - @ToDo Switch using plink 1.9 and eliminate the need for tped file generation
+    - @ToDo Delete the file data

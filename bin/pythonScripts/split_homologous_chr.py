@@ -9,7 +9,7 @@ start_time = time.time()
 print('starting split_homologous_chr')
 
 in_filename = argv[1]
-allele_filename = in_filename.replace('recode.vcf', 'homologous.txt')
+allele_filename = in_filename.replace('recode.vcf', 'allele.vcf')
 homologous_filename = in_filename.replace('recode.vcf', 'homologous.vcf')
 
 with open(in_filename, 'r') as in_file, open(allele_filename, 'w') as allele_file, open(homologous_filename, 'w') as homologous_file:

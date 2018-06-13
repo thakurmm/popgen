@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# @ToDo This script should be moved to bin/bashScripts/new
+# This script should be run from popgen folder
+
 #for i in 100,20 200,40 500,100 100,40 200,80 500,200;
 # for i in 500,20 500,40;
 # for i in 400,20 400,40;
@@ -8,6 +11,7 @@
 # for i in 200,20;
 # for i in 250,20 300,20, 350,20;
 # for i in 200,30 300,30, 400,30;
+mkdir -p pops_data/admixed > /dev/null 2> /dev/null
 for i in 10,300;
 do
     IFS=',' read num_admixed num_anchor <<< ${i};
