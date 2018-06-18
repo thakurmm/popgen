@@ -30,26 +30,44 @@ from collections import defaultdict
 #    import itertools
 #    import pdb
 
-
+#@ToDo Can we replace this with a logic such as
+# 1. Get NUM_RECOMBINATIONS random numbers from 0 to len(chr_strands['POS']
+# 2. For each random position from chr_strands['POS'], write the 'POS' value into recombination_spots tuple
+# 3.       and write this random position as the 'index' (+1 for 1-index reference) in the stop variable (type = pandas.Series) below
 def create_test_chromosome(chr_strands, pops, ref_IDs):
     ### sample from SNPs
     recombination_spots = (
-        chr_strands['POS']
-        .sample(NUM_RECOMBINATIONS, replace=False)
-        .sort_values()
-        .reset_index(drop=True)
+        # This will grab NUM_RECOMBINATIONS unique values from the POS column in the allele.vcf file, which is read into
+        # chr_strands using the pandas.parse_csv functions. replace=False ensures you do not get duplicates.
+        # The list is sorted and re-indexed [0 .... NUM_RECOMBINATIONS] following the random sampling and sorting
+        chr_strands['POS'].sample(NUM_RECOMBINATIONS, replace=False).sort_values().reset_index(drop=True)
     )
 
+    # The command below is creating a pandas.Series object, with the entries as the 1-reference position numbers of the
+    # ids from the recombination_spots list, in the chr_strands list.
+    # For example, if recombination_spots[0] = 34403487 , then stop[0] would contain (index=0, value=53374), where
+    # 53374 is the 1-indexed position (not 0 indexed) where 34403487 is found in the chr_strands array
+    # The lambda function gets the list index in chr_strands where the condition is TRUE
+    # The result of LAMBDA is
     stop = pandas.Series(range(NUM_RECOMBINATIONS)).map(lambda x: np.where(chr_strands['POS'] == recombination_spots[x])[0][0]+1)
+    # The line below is simply adding a (0,0) entry at the start of the "stop" Series above
     start = pandas.concat([pandas.Series(0), stop], ignore_index=True)
+    # The line below is simply adding a (len(chr_strands),len(chr_strands)) entry at the end of the "stop" Series above (not the start series)
+    # Remember len(DataFrame) does not include the header line
     stop = pandas.concat([stop, pandas.Series(len(chr_strands))], ignore_index=True)
+    # So at this point, both start and stop have the same number of entries
 
+    # The next two lines are doing the example same thing. Creating a list of size len(chr_strands) with each value as 0
+    # Two methods are being used to do the same thing - I guess somebody was learning and trying to do two things
     test_chr = np.zeros(len(chr_strands), dtype=np.uint8)
     true_chr = np.array([0] * len(chr_strands), dtype=np.uint8)
     for j in range(2):
         for i in range(j, len(start), 2):
             test_chr[start[i] : stop[i]] = chr_strands[ref_IDs[j]][start[i] : stop[i]]
             true_chr[start[i] : stop[i]] = j
+
+    dummy1 = true_chr.sum()
+    dummy2 = true_chr.shape[0]
 
     ancestry_proportions = true_chr.sum() / true_chr.shape[0]
     return test_chr, ancestry_proportions # proportion of SNPs selected from second ancestry
@@ -74,7 +92,7 @@ def create_test_chromosome_set(chr_strands, pops_dict, num_chromosomes):
     ### copy dict values (lists) since they will be modified; two copies of each haplotype, so ignore one
     ### remove IDs not in chr_strands
     pops_ordered = ['pop1', 'pop2']
-    for i in range(num_admixed_chromosomes):
+    for i in range(num_chromosomes):
         if i % 20 == 0:
             print('on chromosome {}'.format(i))
         ID_pairs.append([pops_dict[x][np.random.randint(0, len(pops_dict[x]))] for x in pops_ordered]) ### get a random ID from each pop
@@ -83,6 +101,8 @@ def create_test_chromosome_set(chr_strands, pops_dict, num_chromosomes):
     test_chromosomes, second_ancestry_proportions = zip(*test_chromosomes_and_proportions)
     ancestry_proportions = [[1 - proportion, proportion] for proportion in second_ancestry_proportions]
 
+    # MANOJ-MOHIT - We have analyzed the code up until here.
+    # ancestry proportions contains the list of proportions for each pop1,pop2 pair as [0.8000, 0.2000] (adds to 1)
     return test_chromosomes, ancestry_proportions, ID_pairs
 
 
