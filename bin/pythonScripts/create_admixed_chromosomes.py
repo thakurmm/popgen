@@ -30,6 +30,27 @@ from collections import defaultdict
 #    import itertools
 #    import pdb
 
+# Whats exactly is happening in the previous function? Lets rehash. We are passing two individuals from the two distinct populations to the
+# function along with the Sample_Ids for each. In addition, we pass the entire allele.vcf data
+# In the function, we first get randomly NUM_RECOMBINATION POS entries from the allele.vcf array in recombination_spots list
+#
+# Next, we identify the exact line number/position each recombination_spots POS entry is located in the allele.vcf file (see explanation
+# before the previous LAMBDA statement).
+# So, we have a list (chr_position_list) which has NUM_RECOMBINATION entries, with each entry corresponding to a line number in the allele.vcf file where
+# the POS entry matches the entry in recombination_spots list.
+# Next, we simply create two lists from this - a "start" list with has a 0 followed by the entries from "stop" and a new stop list
+# with the entries from stop followed by the last line number of the allele file.
+#
+# We use the two list to iterate through the allele.vcf file to grab a section from start[i] to stop[i] , for the column corresponding to 
+# the distinct individual tuple passed to the function, and saves it in the test_chr list. We alternate when picking the sections from the allele file
+# from pop1 first, and then pop2, then pop1 again and so on. This results in a random "mixed indivdual SNPs " in the test_chr list. true_chr is either 0
+# or 1 depending on whether the section is populated for pop1 or pop2. This true_chr is simply used to calculate the "proportion" of pop2 present in
+# this "mixed individual" chromosome.
+#
+# So the function returns the test_chr which represents an admixed chromosome for the "mixed individual" created in the function from the two
+# individuals from the two distinct populations passed to the function. In addition it also returns the ancestry proportion calculated.
+#
+
 #@ToDo Can we replace this with a logic such as
 # 1. Get NUM_RECOMBINATIONS random numbers from 0 to len(chr_strands['POS']
 # 2. For each random position from chr_strands['POS'], write the 'POS' value into recombination_spots tuple
@@ -48,13 +69,18 @@ def create_test_chromosome(chr_strands, pops, ref_IDs):
     # For example, if recombination_spots[0] = 34403487 , then stop[0] would contain (index=0, value=53374), where
     # 53374 is the 1-indexed position (not 0 indexed) where 34403487 is found in the chr_strands array
     # The lambda function gets the list index in chr_strands where the condition is TRUE
-    # The result of LAMBDA is
-    stop = pandas.Series(range(NUM_RECOMBINATIONS)).map(lambda x: np.where(chr_strands['POS'] == recombination_spots[x])[0][0]+1)
+    # The result of LAMBDA is (don't try to decode this ..... but this is what it does) that stop is a panda.series object
+    #    with "NUM_RECOMBINATIONS" entries, where each entry is the position in the allele.vcf file or chr_strands list
+    #    where the recombination_spots POS value is found in the file.
+    # For e.g. if recombination_spots[0] == 34403487  then stop[0] = 53374
+    # & if recombination_spots[1] == 36891858  then stop[1] = 62087
+    # @ToDo Can we devise a simpler method to do this ..... this pandas --- lambda combo is very very confusing
+    chr_position_list = pandas.Series(range(NUM_RECOMBINATIONS)).map(lambda x: np.where(chr_strands['POS'] == recombination_spots[x])[0][0] + 1)
     # The line below is simply adding a (0,0) entry at the start of the "stop" Series above
-    start = pandas.concat([pandas.Series(0), stop], ignore_index=True)
+    start = pandas.concat([pandas.Series(0), chr_position_list], ignore_index=True)
     # The line below is simply adding a (len(chr_strands),len(chr_strands)) entry at the end of the "stop" Series above (not the start series)
     # Remember len(DataFrame) does not include the header line
-    stop = pandas.concat([stop, pandas.Series(len(chr_strands))], ignore_index=True)
+    stop = pandas.concat([chr_position_list, pandas.Series(len(chr_strands))], ignore_index=True)
     # So at this point, both start and stop have the same number of entries
 
     # The next two lines are doing the example same thing. Creating a list of size len(chr_strands) with each value as 0
@@ -73,18 +99,32 @@ def create_test_chromosome(chr_strands, pops, ref_IDs):
     return test_chr, ancestry_proportions # proportion of SNPs selected from second ancestry
 
 
-def create_pure_chromosomes_from_all_pops(chr_strands, n, pop1_ids, pop2_ids):
-    return [create_pure_chromosomes_from_one_pop(chr_strands, int(n/2.0), popIDs) for popIDs in [pop1_ids, pop2_ids]]
+# Simple wrapper to call create_pure_chromosomes_from_one_pop function twice, once for each pure population list
+# Returns a list with two arguments, first being a list of lists as pure chromosomes for a set of individuals from the two populations
+# and 2nd as the list of individuals. We would always return two rows from this function - pop1 row and pop2 row.
+def create_pure_chromosomes_from_all_pops(chr_strands, input_num_anchor, pop1_ids, pop2_ids):
+    return [create_pure_chromosomes_from_one_pop(chr_strands, int(input_num_anchor/2.0), popIDs) for popIDs in [pop1_ids, pop2_ids]]
 
 
-def create_pure_chromosomes_from_one_pop(chr_strands, n, popIDs):
-    assert n <= len(popIDs)
+# This function is called for each set of distinct populations at a time. 
+# The function will create a list of "pure" choromosome list for a random list of individuals from the population passed to it
+# The assert statement below ensures that we use the minimum of the two lengths from the two populations, so that we get
+# exactly num_anchor entries after two iterations of this function.
+def create_pure_chromosomes_from_one_pop(chr_strands, half_input_num_anchor, popIDs):
+    assert half_input_num_anchor <= len(popIDs)
 
-    IDs_to_use = np.random.choice(popIDs, size=n, replace=False)
+    IDs_to_use = np.random.choice(popIDs, size=half_input_num_anchor, replace=False)
     chroms = [chr_strands[popID] for popID in IDs_to_use]
     return [chroms, IDs_to_use]
 
 
+# This function is very similar to create_test_chromosome, except it returns three items
+# 1st item is a list of lists - or list of "admixed chromosomes" - one for each distinct individual pair
+#      where the "num_chromosomes" distinct individual pairs are randomly created in the function
+# 2nd items is a list of ancestry proportions as a tuple - for pop1 and pop2
+# and 3rd item is the list of random distinct individual pairs used in the function
+# Please read create_test_chromosome to really understand what this function does, as this function
+# is basically a "list" return of the result of that function.
 def create_test_chromosome_set(chr_strands, pops_dict, num_chromosomes):
     ### pops_dict should map population name to list of haploid IDs corresponding to that population
 
@@ -97,12 +137,15 @@ def create_test_chromosome_set(chr_strands, pops_dict, num_chromosomes):
             print('on chromosome {}'.format(i))
         ID_pairs.append([pops_dict[x][np.random.randint(0, len(pops_dict[x]))] for x in pops_ordered]) ### get a random ID from each pop
 
+    # The line below will populate the variable with a list of paired entries; first, the admixed chromosome list,
+    # and second, the ancestry proportion in the list 
     test_chromosomes_and_proportions = [create_test_chromosome(chr_strands, pops_ordered, pair) for pair in ID_pairs]
-    test_chromosomes, second_ancestry_proportions = zip(*test_chromosomes_and_proportions)
-    ancestry_proportions = [[1 - proportion, proportion] for proportion in second_ancestry_proportions]
+    
+    # The zip command below just extracts the two items from the list of pairs above into a list of admixed chromosomes
+    # and the list of ancestry proportions
+    test_chromosomes, pop2_ancestry_proportions = zip(*test_chromosomes_and_proportions)
+    ancestry_proportions = [[1 - proportion, proportion] for proportion in pop2_ancestry_proportions]
 
-    # MANOJ-MOHIT - We have analyzed the code up until here.
-    # ancestry proportions contains the list of proportions for each pop1,pop2 pair as [0.8000, 0.2000] (adds to 1)
     return test_chromosomes, ancestry_proportions, ID_pairs
 
 
@@ -157,6 +200,7 @@ if __name__ == '__main__':
     #proportions_out_filename_homologous = '/home/greg/School/popgen/data/admixed/{}_{}_admixed_{}admixed_{}pure_proportions.txt'.format(sourcepop1, sourcepop2, num_admixed_chromosomes, num_anchor)
     proportions_out_filename = 'pops_data/admixed/{}_{}_admixed_{}admixed_{}pure_proportions.txt'.format(sourcepop1, sourcepop2, num_admixed_chromosomes, num_anchor)
 
+    # Get the population id for each population (CEU and YRI) into two list variables
     sourcepop1_ids = get_pop_IDs(sourcepop1_ids_filename)
     sourcepop2_ids = get_pop_IDs(sourcepop2_ids_filename)
 
@@ -167,6 +211,11 @@ if __name__ == '__main__':
 
     sourcepop1_ids, sourcepop2_ids = map(lambda ids: list(filter(lambda ID: ID in all_chr_strands.columns, ids)), [sourcepop1_ids, sourcepop2_ids])
 
+    # The logic below looks through the IDs in the population sample ids file, and finds the ones for which we have a
+    # column in the allele file. This is because we may NOT have phase3 data for ALL the IDs for that population, but they
+    # would all be listed in the Sample_IDs file for the population.
+    # So, if we have 200 entries in CEU_Sample_IDs.txt but only 180 columns match, then our resultant ids would be 180.
+    # 
     # The compicated lambda command is doing what the two (for ... for) loops are doing
     # resultant_pop1_ids = []
     # for id in sourcepop1_ids:
@@ -182,14 +231,27 @@ if __name__ == '__main__':
     #         if id == chr_id:
     #             resultant_pop2_ids.append(id)
     # sourcepop2_ids = resultant_pop2_ids
+    
+    # So, at this point we have sourcepop1_ids and sourcepop2_ids that have corresponding columns in the allele & homologous .vcf files
 
+    # The line below gets a list of lists, i.e. list of admixed chromosome list in the variable chromosomes
+    # ancestry_proportions is a list of tuples with the proportion for each population
+    # ID_pairs is a random list of indivual pairs for each of the two "distinct" proportions used to the get the other two variables in the function
     chromosomes, ancestry_proportions, ID_pairs = create_test_chromosome_set(all_chr_strands, {'pop1' : sourcepop1_ids, 'pop2' : sourcepop2_ids}, num_admixed_chromosomes)
     ### ancestry proportions is a list of [pop1_proportion, pop2_proportion] for each test chromosome
     print('created admixed chromosomes; creating anchor chromosomes')
 
+    # The line below gets a list of pure chromosomes for the individuals from the two populations as two rows with
+    # 1st arg of each row being a list of lists of pure chromosomes for a random list of pop ids, 
+    # and 2nd arg being the list of population IDs randomly chosen in the function
     pure = create_pure_chromosomes_from_all_pops(all_chr_strands, num_anchor, sourcepop1_ids, sourcepop2_ids)
+    # source1pure is chromosomes and pop ids from first population
+    # source2pure is chromosomes and pop ids from second population
     source1pure, source2pure = pure
 
+    # In the lines below, the ancestry prportions list obtained above for the admixed chromosomes, is extended to contain
+    # num_anchor/2.0 entries with a tuple [1,0] implying this is a "population 1 pure proprotion" and the next line
+    #extending to contain num_anchor/2.0 entries with a tuple [0,1] implying this a "population 2 pure proportion".
     num_anchor_per_ancestry = int(num_anchor/2.0)
     ancestry_proportions.extend([[1,0]] * num_anchor_per_ancestry)
     ancestry_proportions.extend([[0,1]] * num_anchor_per_ancestry)
@@ -198,37 +260,51 @@ if __name__ == '__main__':
 
     all_chr_strands.drop(all_chr_strands.columns[9:], axis=1, inplace=True)
     to_write = all_chr_strands
-    to_write_homologous = to_write.copy()
+    to_write_allele = to_write.copy()
 
     print('finished dropping unneeded columns')
 
     print('building dataframe, starting with admixed chromosomes')
 
+    # defaultdict is a neat way to create a dict where the "keys" will be dynamically created later
+    # and when we check for a value for a key never previously allocated, it is automatically set to "0".
     used_names = defaultdict(int)
+    # The statement below will assign 
+    # index to 0, 1, 2,..... etc
+    # chrom will have the admixed chromosome list 
+    # and id_pair is the pair of individuals used to create the admixed chromosome list
     for index, (chrom, id_pair) in enumerate(zip(chromosomes, ID_pairs)):
         if index % 20 == 0:
             print('on column: {}'.format(index))
 
+        # Using "name" to represent the name of the "offspring" from the two individuals
         name = '-'.join(id_pair).replace('_', '-')
-        idx = used_names[name]
-        used_names[name] += 1
-        name = '{}-{}'.format(name, idx)
+        idx = used_names[name]      # idx will start with 0 due to the defaultdict use above
+        used_names[name] += 1       # Record how many times we have a specific offspring name
+        name = '{}-{}'.format(name, idx)    # Rename offspring name to include count to really make them unique
 
+        # We removed all the columns after the 9th columns, so all the population id columns are dropped.
+        # Now, we are adding the columns below for each admixed individual with the name as "HAxxxx-HAyyyy-n" (n >=0 )
+        # and we are writing it as required for a .vcf file format (0|0  or 1|1 etc)
         to_write[name] = np.fromiter(('{0}|{0}'.format(snp) for snp in chrom), dtype='<U3')
-        to_write_homologous[name] = chrom
+        # Where homologous has the entries as "0|0" and allele has entries as "0" .
+        # The line below simply adds the admixed chromosome list as a new column
+        to_write_allele[name] = chrom
 
     if (num_anchor > 0):
         print('adding pure chromosomes to dataframe')
     else:
         print('not adding any pure chromosomes to dataframe')
 
+    # The logic below is wanting to add all columns from source1pure chromosomes and source2pure chromosomes
+    # The len(to_write.columns) and column variable is just so we can print which column we are currently writing
     for pure_chroms, IDs in [source1pure, source2pure]:
         for column, (chrom, ID) in enumerate(zip(pure_chroms, IDs), len(to_write.columns)):
             if column % 20 == 0:
                 print('on column: {}'.format(column))
 
             to_write[ID] = np.fromiter(('{0}|{0}'.format(snp) for snp in chrom), dtype='<U3')
-            to_write_homologous[ID] = chrom
+            to_write_allele[ID] = chrom
 
     #print('finished building dataframe. Writing to .vcf file: {}'.format(out_filename))
     print('finished building dataframe. Writing to .vcf file: {}'.format(out_filename_homologous))
@@ -242,10 +318,17 @@ if __name__ == '__main__':
 
     #with open(out_filename_homologous, 'w') as f_homologous:
     with open(out_filename_allele, 'w') as f_homologous:
-        to_write_homologous.to_csv(f_homologous, sep='\t', index=False)
+        to_write_allele.to_csv(f_homologous, sep='\t', index=False)
 
     print('finished writing to .vcf file. writing ancestry proportions: {}'.format(proportions_out_filename))
 
     with open(proportions_out_filename, 'w') as f:
-        for ancestry_zero, ancestry_one in ancestry_proportions:
-            f.write('{} {}\n'.format(ancestry_zero, ancestry_one))
+        if __name__ == '__main__':
+            for ancestry_zero, ancestry_one in ancestry_proportions:
+                f.write('{} {}\n'.format(ancestry_zero, ancestry_one))
+    
+    # At the end of this program, we should have a new homologous vcf file with columns for individuals with the admixed chromosomes, and pure 
+    # chromosomes from population 1 and population 2. We will also have a similar "allele.txt" file with same number of columns
+    # as the homologous.vcf file. 
+    # We will also have a ancestry proportions file with the proportions for each individuals column
+        
