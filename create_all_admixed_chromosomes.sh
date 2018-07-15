@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x
 # @ToDo This script should be moved to bin/bashScripts/new
 # This script should be run from popgen folder
 
@@ -11,16 +11,28 @@
 # for i in 200,20;
 # for i in 250,20 300,20, 350,20;
 # for i in 200,30 300,30, 400,30;
-mkdir -p pops_data/admixed > /dev/null 2> /dev/null
+mkdir -p pops_data/admixed/new/bed > /dev/null 2> /dev/null
 for i in 10,300;
 do
-    IFS=',' read num_admixed num_anchor <<< ${i};
-	python create_admixed_chromosomes.py --num_admixed_chromosomes $num_admixed --num_anchor $num_anchor --source_pops CEU YRI;
-	plink --vcf data/admixed/CEU_YRI_admixed_${num_admixed}admixed_${num_anchor}pure.vcf --make-bed --out data/admixture/new/bed/CEU_YRI_admixed_${num_admixed}admixed_${num_anchor}pure;
-	admixture --cv data/admixture/new/bed/CEU_YRI_admixed_${num_admixed}admixed_${num_anchor}pure.bed 2;
+#    IFS=',' read num_admixed num_anchor <<< ${i};
+    num_admixed=$(echo $i | cut -f1 -d',')
+    num_anchor=$(echo $i | cut -f2 -d',')
+	python bin/pythonScripts/create_admixed_chromosomes.py --num_admixed_chromosomes $num_admixed --num_anchor $num_anchor --source_pops CEU YRI;
+
+    admixed_output_homologous_file="pops_data/admixed/CEU_YRI_admixed_${num_admixed}admixed_${num_anchor}pure_HOMOLOGOUS.vcf"
+    admixed_output_allele_file="pops_data/admixed/CEU_YRI_admixed_${num_admixed}admixed_${num_anchor}pure_ALLELE_vcf.txt"
+    admixed_proportions_file="pops_data/admixed/CEU_YRI_admixed_${num_admixed}admixed_${num_anchor}pure_proportions.txt"
+    
+    plink_output_file_prefix="pops_data/admixed/new/bed/CEU_YRI_admixed_${num_admixed}admixed_${num_anchor}pure"
+	plink2 --noweb --vcf ${admixed_output_homologous_file}  --make-bed --out ${plink_output_file_prefix};
+
+	admixture --cv ${plink_output_file_prefix}.bed 2;
+	mv CEU_YRI_admixed_${num_admixed}admixed_${num_anchor}pure.2.* pops_data/admixed/new	
 done
 
-mv CEU_YRI_admixed_* data/admixture/new/admix;
+# The python script below plots the proportions file output by create_admxed_chromosomes.py AND the .Q file created by the admixture command above
+# We had done this using gnuplot - and thus are currently skipping analyzing this program for now.
+# We looked through the proportions and .Q file and determined that the files results are a "decent" match.
 
-python plot_admix_results.py
+#python plot_admix_results.py
 

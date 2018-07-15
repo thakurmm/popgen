@@ -83,9 +83,9 @@ ALL scripts below must be run from the top level `popgen` folder
 	- Output data:
 		- In `data/admixed/` directory:
 			- admixed training set, in two forms:
-				- `CEU_YRI_admixed_40admixed_100pure.vcf`
-				- `CEU_YRI_admixed_40admixed_100pure_homologous.vcf`
-				- These have the same column names, but when the first vcf has `0|0`, the homologous vcf has `1|1`, and when the first vcf has `1|1`, the homologous vcf has `1`.
+				- `CEU_YRI_admixed_40admixed_100pure_ALLELE_vcf.txt`
+				- `CEU_YRI_admixed_40admixed_100pure_HOMOLOGOUS.vcf`
+				- These have the same column names, but when the allele file has `0`, the homologous vcf has `0|0`, and when the allele file has `1`, the homologous vcf has `1|1`.
 			- True ancestry proportions for the admixed training set
 				- e.g. `CEU_YRI_admixed_40admixed_100pure_proportions.txt`
 				- **not** used by STRUCTUREpainter (we only have this information here because of our artificially created training set). Used in `plot_admix_results.py` script to see how well ADMIXTURE does in inferring ancestry proportions.

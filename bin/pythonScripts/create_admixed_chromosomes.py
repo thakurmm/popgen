@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 '''
+This script currently expects the output folder pops_data/admixed to be present.
+
 parses the output of `split_homologous_chr.py` and creates a number of admixed genomes from the two given populations
 - run the script:
     mkdir -p data/admixed
@@ -196,7 +198,7 @@ if __name__ == '__main__':
     #out_filename = out_basename + '.vcf' ### 0|0 0|0 1|1 0|0
     #out_filename_homologous = out_basename + '_homologous.vcf' ### 0 0 1 0
     out_filename_homologous = out_basename + '_HOMOLOGOUS.vcf' ### 0|0 0|0 1|1 0|0
-    out_filename_allele = out_basename + '_ALLELE.vcf' ### 0 0 1 0
+    out_filename_allele = out_basename + '_ALLELE_vcf.txt' ### 0 0 1 0
     #proportions_out_filename_homologous = '/home/greg/School/popgen/data/admixed/{}_{}_admixed_{}admixed_{}pure_proportions.txt'.format(sourcepop1, sourcepop2, num_admixed_chromosomes, num_anchor)
     proportions_out_filename = 'pops_data/admixed/{}_{}_admixed_{}admixed_{}pure_proportions.txt'.format(sourcepop1, sourcepop2, num_admixed_chromosomes, num_anchor)
 
