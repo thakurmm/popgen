@@ -99,7 +99,6 @@ ALL scripts below must be run from the top level `popgen` folder
 		- In `test_input/` directory (test input to STRUCTUREpainter):
 			- csv containing ancestry information
 			- csv containing genetic information
-	- Right now the parameters are hard-coded, you can change them at the bottom of the file. Everything under `if __name__ == "__main__"` is only run when you directly call `python generate_test_set.py`, but not when you import *from* this file. The same thing is done in the other Python scripts, so that they can import things from each other without side effects, i.e. extra code being run.
 
 6. After you've followed these steps, `test_ancestry.sh` will run STRUCTUREpainter with appropriate parameters.
 

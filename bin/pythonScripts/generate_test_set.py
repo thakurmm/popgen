@@ -28,16 +28,16 @@ def create_test_chromosomes(chr_strands, pops, ref_IDs, num_switch):
 	return [test_chr, true_chr]
 
 
-def create_test_chromosome_set(chr_strands, pops_dictionary, num_chromosomes, num_switch=8):
+def create_test_chromosome_set(chr_strands, pops_dict, num_chromosomes, num_switch=8):
 	### pops_dictionary should map population name to list of haploid IDs corresponding to that population
 	### if num_chromosomes == -1, as many chromosomes as possible will be created
 
 	ID_pairs = []
 	### copy dict values (lists) since they will be modified; two copies of each haplotype, so ignore one
 	### remove IDs not in chr_strands
-	pops_dict = {key: list(filter(lambda v: v[-2:] != '_2' and v in chr_strands.columns, val)) for key, val in pops_dictionary.items()}
-	pops_ordered = sorted(list(pops_dictionary.keys()))
-	assert len(pops_ordered) == 2
+	# pops_dict = {key: list(filter(lambda v: v[-2:] != '_2' and v in chr_strands.columns, val)) for key, val in pops_dictionary.items()}
+
+	pops_ordered = ['pop1', 'pop2']
 	for i in itertools.count():
 		### keep getting a random ID from each population, until either one of the ID lists is empty, or num_chromosomes is exceeded
 		if [] in pops_dict.values() or (num_chromosomes != -1 and i >= num_chromosomes):
@@ -47,31 +47,53 @@ def create_test_chromosome_set(chr_strands, pops_dictionary, num_chromosomes, nu
 	return [create_test_chromosomes(chr_strands, pops_ordered, pair, num_switch) for pair in ID_pairs], ID_pairs
 
 
-def read_ids(filename):
+def get_pop_IDs(filename):
+	ret = []
 	with open(filename, 'r') as f:
-		return map(str.strip, f.readlines())
+		for line in f:
+			line = line.strip('\n')
+			if line != '':
+				ret.append(line)
+	return ret
+
 
 if __name__ == '__main__':
 	np.random.seed(0)
-	test1_ids_filename = '/home/greg/School/popgen/SampleIDs/CEU_Sample_IDs_haploid.txt'
-	test2_ids_filename = '/home/greg/School/popgen/SampleIDs/YRI_Sample_IDs_haploid.txt'
-	test_source_filename = '/home/greg/School/popgen/data/chr22.phase3.ASW_CEU_YRI.SNPs.homologous.txt'
+	
+	sourcepop1 = "CEU"
+	sourcepop2 = "YRI"
+	sourcepop1_ids_filename = 'SampleIDs/{}_Sample_IDs_haploid.txt'.format(sourcepop1)
+	sourcepop2_ids_filename = 'SampleIDs/{}_Sample_IDs_haploid.txt'.format(sourcepop2) 
+	
+	populations = "ASW_CEU_YRI"
+	chr_number = 22
+	allele_filename = 'pops_data/{}_Data/Chr{}/tmp/chr22.phase3.{}.SNPs.allele.vcf'.format(populations, chr_number, populations)
+	# test1_ids_filename = '/home/greg/School/popgen/SampleIDs/CEU_Sample_IDs_haploid.txt'
+	# test2_ids_filename = '/home/greg/School/popgen/SampleIDs/YRI_Sample_IDs_haploid.txt'
+	# test_source_filename = '/home/greg/School/popgen/data/chr22.phase3.ASW_CEU_YRI.SNPs.homologous.txt'
 
-	test1_ids = read_ids(test1_ids_filename)
-	test2_ids = read_ids(test2_ids_filename)
+	sourcepop1_ids = get_pop_IDs(sourcepop1_ids_filename)
+	sourcepop2_ids = get_pop_IDs(sourcepop2_ids_filename)
 
-	num_test = 10
+	num_admixed_chromosomes = 10
 
-	source_df = pd.read_csv(test_source_filename, sep='\t', header=0, comment='#')
-	test_chr = create_test_chromosome_set(source_df, {'pop1' : test1_ids, 'pop2' : test2_ids}, num_test)
+	all_chr_strands = pd.read_csv(allele_filename, sep='\t', header=0, comment='#')
+#	source_df = pd.read_csv(allele_filename, sep='\t', header=0, comment='#')
+	all_chr_strands.drop_duplicates(inplace=True)
 
-	ancestry_df = pd.DataFrame(source_df[source_df.columns[:9]])
-	chrom_df = pd.DataFrame(source_df[source_df.columns[:9]])
+	# The function below ensures thats the sourcepop1_ids and pop2_ids consist ONLY of individuals (N12345_0, N12345_1 etc) from the allele.vcf file
+	# that are present in sourcepop1_ids_filename and sourcepop1_ids_filename (the haploid.txt files for the two populations)
+	sourcepop1_ids, sourcepop2_ids = map(lambda ids: list(filter(lambda ID: ID in all_chr_strands.columns, ids)),[sourcepop1_ids, sourcepop2_ids])
+	
+	test_chr = create_test_chromosome_set(all_chr_strands, {'pop1' : sourcepop1_ids, 'pop2' : sourcepop2_ids}, num_admixed_chromosomes)
+
+	ancestry_df = pd.DataFrame(all_chr_strands[all_chr_strands.columns[:9]])
+	chrom_df = pd.DataFrame(all_chr_strands[all_chr_strands.columns[:9]])
 	
 	for (test, true), id_pair in zip(*test_chr):
 		name = '-'.join(id_pair).replace('_', '-')
 		ancestry_df[name] = true
 		chrom_df[name] = test
 
-	ancestry_df.to_csv('test_input/CEU_YRI_test_cases_true_ancestry_try2.csv', sep='\t', index=False)
-	chrom_df.to_csv('test_input/CEU_YRI_test_cases_chrom_try2.csv', sep='\t', index=False)
+	ancestry_df.to_csv('test_input/CEU_YRI_test_cases_true_ancestry_try2_mm.csv', sep='\t', index=False)
+	chrom_df.to_csv('test_input/CEU_YRI_test_cases_chrom_try2_mm.csv', sep='\t', index=False)

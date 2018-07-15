@@ -94,9 +94,6 @@ def create_test_chromosome(chr_strands, pops, ref_IDs):
             test_chr[start[i] : stop[i]] = chr_strands[ref_IDs[j]][start[i] : stop[i]]
             true_chr[start[i] : stop[i]] = j
 
-    dummy1 = true_chr.sum()
-    dummy2 = true_chr.shape[0]
-
     ancestry_proportions = true_chr.sum() / true_chr.shape[0]
     return test_chr, ancestry_proportions # proportion of SNPs selected from second ancestry
 
