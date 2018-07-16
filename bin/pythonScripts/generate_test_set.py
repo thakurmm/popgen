@@ -66,7 +66,9 @@ if __name__ == '__main__':
 	sourcepop2_ids_filename = 'SampleIDs/{}_Sample_IDs_haploid.txt'.format(sourcepop2) 
 	
 	populations = "ASW_CEU_YRI"
+	#@ToDo We need to incorporate chr_number somewhere in our output folder path.
 	chr_number = 22
+	# File below is from the tmp folder because the Chrom line (header line) does not and SHOULD not have a "HASH"
 	allele_filename = 'pops_data/{}_Data/Chr{}/tmp/chr22.phase3.{}.SNPs.allele.vcf'.format(populations, chr_number, populations)
 	# test1_ids_filename = '/home/greg/School/popgen/SampleIDs/CEU_Sample_IDs_haploid.txt'
 	# test2_ids_filename = '/home/greg/School/popgen/SampleIDs/YRI_Sample_IDs_haploid.txt'
