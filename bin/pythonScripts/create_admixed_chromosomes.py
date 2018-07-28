@@ -5,7 +5,7 @@ This script currently expects the output folder pops_data/admixed to be present.
 
 parses the output of `split_homologous_chr.py` and creates a number of admixed genomes from the two given populations
 - run the script:
-    mkdir -p data/admixed
+    mkdir -p pops_data/admixed
     python create_admixed_chromosomes.py --num_admixed_chromosomes 10 --num_anchor 300 --source_pops CEU YRI
 
 (outputs two files in data/admixed/ directory: a .vcf file containing admixed chromosomes, and a proportions.txt file
@@ -190,6 +190,7 @@ if __name__ == '__main__':
     sourcepop2_ids_filename = 'SampleIDs/{}_Sample_IDs_haploid.txt'.format(sourcepop2)
 
     #out_basename = '/home/greg/School/popgen/data/admixed/{}_{}_admixed_{}admixed_{}pure'.format(sourcepop1, sourcepop2, num_admixed_chromosomes, num_anchor)
+    # @ToDo might want to change this so the files don't go into the admixed folder in one big mess
     out_basename = 'pops_data/admixed/{}_{}_admixed_{}admixed_{}pure'.format(sourcepop1, sourcepop2, num_admixed_chromosomes, num_anchor)
     # out_filename = '/home/greg/School/popgen/data/admixed/{}_{}_admixed_n={}.vcf'.format(sourcepop1, sourcepop2, num_admixed_chromosomes)
     #out_filename = out_basename + '.vcf' ### 0|0 0|0 1|1 0|0
