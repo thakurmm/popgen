@@ -73,7 +73,8 @@ ALL scripts below must be run from the top level `popgen` folder
 		- `chr22.ASW_CEU_YRI.SNPs.homologous.25k.bed`
 		- `chr22.phase3.ASW_CEU_YRI.SNPs.homologous.txt`
 
-4. Run `create_admixed_chromosomes.py` to parse the output of `split_homologous_chr.py` (which is called as part of the previous step) and create an admixed training set.
+4. Run `create_all_admixed_chromosomes.sh`, which executes "create_admixed_chromosomes.py" to parse the output of `split_homologous_chr.py` (which is called as part of the previous step) and create an admixed training set.
+   The script will also run admixture after running the python script.
 
     In this script, we will be breaking up the "combined" vcf file from the previous step, into multiple VCF files per population of interest.
     This is where we use the list of sampleIds per population created in the 1st step above.

@@ -24,8 +24,12 @@ do
     admixed_output_allele_file="pops_data/admixed/CEU_YRI_admixed_${num_admixed}admixed_${num_anchor}pure_ALLELE_vcf.txt"
     admixed_proportions_file="pops_data/admixed/CEU_YRI_admixed_${num_admixed}admixed_${num_anchor}pure_proportions.txt"
     
-    plink_output_file_prefix="pops_data/admixture/bed/CEU_YRI_admixed_${num_admixed}admixed_${num_anchor}pure"
-	plink2 --noweb --vcf ${admixed_output_homologous_file}  --make-bed --out ${plink_output_file_prefix};
+    plink_output_file_prefix="pops_data/admixture.orig/bed/CEU_YRI_admixed_${num_admixed}admixed_${num_anchor}pure"
+    # First we prune the file to eliminate SNPs that are linked
+	plink2 --noweb --vcf ${admixed_output_homologous_file}  --indep-pairwise 50 5 0.5 --out tmp_plink1_out
+	# Now lets use the prune.in file to generate the bed file
+	plink2 --noweb --vcf ${admixed_output_homologous_file}  --extract tmp_plink1_out.prune.in --make-bed --thin 0.9 --out ${plink_output_file_prefix};
+	/bin/rm tmp_plink1_out*
 
 	admixture --cv ${plink_output_file_prefix}.bed 2;
 	mv CEU_YRI_admixed_${num_admixed}admixed_${num_anchor}pure.2.* pops_data/admixture	
