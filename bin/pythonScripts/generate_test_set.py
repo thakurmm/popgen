@@ -5,14 +5,15 @@ import itertools
 import pdb
 
 #### Function to create test chromosomes ####
-def create_test_chromosomes(chr_strands, pops, ref_IDs, num_switch):
-	test_pos_chromosome = chr_strands['POS'].sample(num_switch, replace=False) ### sample from SNPs
-	assert(len(test_pos_chromosome) == num_switch)
+#### Create "admixed" populations from two pure populations
+def create_test_chromosomes(chr_strands, pops, ref_IDs, num_recombinations):
+	test_pos_chromosome = chr_strands['POS'].sample(num_recombinations, replace=False) ### sample from SNPs
+	assert(len(test_pos_chromosome) == num_recombinations)
 
 	test_pos_chromosome.sort_values(inplace=True)
 	test_pos_chromosome.reset_index(drop=True, inplace=True)
 
-	test_chr_idx_stop = pd.Series(range(num_switch)).map(lambda x: np.where(chr_strands['POS'] == test_pos_chromosome[x])[0][0]+1)
+	test_chr_idx_stop = pd.Series(range(num_recombinations)).map(lambda x: np.where(chr_strands['POS'] == test_pos_chromosome[x])[0][0] + 1)
 	test_chr_idx_start = pd.concat([pd.Series(0), test_chr_idx_stop], ignore_index=True)
 	test_chr_idx_stop = pd.concat([test_chr_idx_stop, pd.Series(len(chr_strands))], ignore_index=True)
 	start = test_chr_idx_start
@@ -28,7 +29,7 @@ def create_test_chromosomes(chr_strands, pops, ref_IDs, num_switch):
 	return [test_chr, true_chr]
 
 
-def create_test_chromosome_set(chr_strands, pops_dict, num_chromosomes, num_switch=8):
+def create_test_chromosome_set(chr_strands, pops_dict, num_chromosomes, num_recombinations=8):
 	### pops_dictionary should map population name to list of haploid IDs corresponding to that population
 	### if num_chromosomes == -1, as many chromosomes as possible will be created
 
@@ -44,7 +45,7 @@ def create_test_chromosome_set(chr_strands, pops_dict, num_chromosomes, num_swit
 			break
 		ID_pairs.append([pops_dict[pop].pop(np.random.randint(0, len(pops_dict[pop]))) for pop in pops_ordered]) ### get a random ID from each pop
 
-	return [create_test_chromosomes(chr_strands, pops_ordered, pair, num_switch) for pair in ID_pairs], ID_pairs
+	return [create_test_chromosomes(chr_strands, pops_ordered, pair, num_recombinations) for pair in ID_pairs], ID_pairs
 
 
 def get_pop_IDs(filename):
@@ -83,8 +84,8 @@ if __name__ == '__main__':
 #	source_df = pd.read_csv(allele_filename, sep='\t', header=0, comment='#')
 	all_chr_strands.drop_duplicates(inplace=True)
 
-	# The function below ensures thats the sourcepop1_ids and pop2_ids consist ONLY of individuals (N12345_0, N12345_1 etc) from the allele.vcf file
-	# that are present in sourcepop1_ids_filename and sourcepop1_ids_filename (the haploid.txt files for the two populations)
+	# The function below scans all_chr_strands (the input allele.vcf file across the populations of interest), and extracts the respective
+	# pop ids from pop1 and pop2 in the two lists (as sourcepop1_ids and sourcepop2_ids)
 	sourcepop1_ids, sourcepop2_ids = map(lambda ids: list(filter(lambda ID: ID in all_chr_strands.columns, ids)),[sourcepop1_ids, sourcepop2_ids])
 	
 	test_chr = create_test_chromosome_set(all_chr_strands, {'pop1' : sourcepop1_ids, 'pop2' : sourcepop2_ids}, num_admixed_chromosomes)
