@@ -15,4 +15,4 @@ python bin/pythonScripts/Test_Local_Ancestry_Inference_ASW_from_3Pops.py \
     --all_admix_filename pops_data/admixture/CEU_YRI_admixed_10admixed_300pure.2.Q \
     --chrom_admix_filename pops_data/admixture/CEU_YRI_admixed_10admixed_300pure.2.Q \
     --num_test 8 \
-    --test_filename test_input/CEU_YRI_test_cases_chrom_try2_mm.csv
+    --test_filename test_input/CEU_YRI_test_SNPs_ALLELE_vcf.txt

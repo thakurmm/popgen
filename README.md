@@ -71,7 +71,8 @@ ALL scripts below must be run from the top level `popgen` folder
 		- `chr22.phase3.ASW_CEU_YRI.SNPs.homologous.vcf`
 		- `chr22.ASW_CEU_YRI.SNPs.homologous.header.vcf`
 		- `chr22.ASW_CEU_YRI.SNPs.homologous.25k.bed`
-		- `chr22.phase3.ASW_CEU_YRI.SNPs.homologous.txt`
+		- `chr22.phase3.ASW_CEU_YRI.SNPs.allele.vcf`
+		# @Todo This should be allele.vcf.txt
 
 4. Run `create_all_admixed_chromosomes.sh`, which executes "create_admixed_chromosomes.py" to parse the output of `split_homologous_chr.py` (which is called as part of the previous step) and create an admixed training set.
    The script will also run admixture after running the python script.
@@ -90,6 +91,8 @@ ALL scripts below must be run from the top level `popgen` folder
 			- True ancestry proportions for the admixed training set
 				- e.g. `CEU_YRI_admixed_40admixed_100pure_proportions.txt`
 				- **not** used by STRUCTUREpainter (we only have this information here because of our artificially created training set). Used in `plot_admix_results.py` script to see how well ADMIXTURE does in inferring ancestry proportions.
+                - This is included as verification. The advantage of STRUCTUREpainter is that pure populations are NOT needed.
+
 
 5. Run `generate_test_set.py`.
 
@@ -102,7 +105,12 @@ ALL scripts below must be run from the top level `popgen` folder
 			- csv containing genetic information
 
 6. After you've followed these steps, `test_ancestry.sh` will run STRUCTUREpainter with appropriate parameters.
-
+    - This calls Test_Local_Ancestry_Inference_ASW_from_3Pops.py
+    - Input Data is hard-coded currently (chr22, CEU+YRI)
+    
+    - Currently, the argument takes an "all_admixture_filename" is being passed the Q file of only chromosome 22 from
+       create_all_admixed_chromosomes.sh. This needs to be a combined Q file for all 22 autosomal chromosomes.
+        # @Todo The logic for passing a combined 22 chromsome VCF file to ADMIXTURE needs to happen 
 7. `evaluate_inferences.py` will plot the results of STRUCTUREpainter against the true ancestry values for the test set of chromosomes. See `evaluate_inferences.sh` for sample parameters. The Python script only requires two files, containing true and inferred ancestry, as well as a path for the plot that will be produced and saved.
 
 #### 2018 TODOs ####

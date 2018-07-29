@@ -3,10 +3,15 @@
 '''
 This script currently expects the output folder pops_data/admixed to be present.
 
+This script should be run as part of create_all_admixed_chromsomes.sh. The arguments are there.
+
 parses the output of `split_homologous_chr.py` and creates a number of admixed genomes from the two given populations
 - run the script:
     mkdir -p pops_data/admixed
     python create_admixed_chromosomes.py --num_admixed_chromosomes 10 --num_anchor 300 --source_pops CEU YRI
+
+Note: The above is almost what create_all_admixed_chromsomes.sh does, except that ALSO runs admixture and creates an
+admixture folder in pops_data. So this should not really be run directly.
 
 (outputs two files in data/admixed/ directory: a .vcf file containing admixed chromosomes, and a proportions.txt file
     containing the ancestry proportions of each of the generated chromosome, for comparison with the output
