@@ -1,3 +1,17 @@
+'''
+This file is similar to create_admixed_chromsomes.py, which has additional comments
+
+Pases the output of s='split_homologous_chr.py', and creates a number of admixed genomes from the two given populations
+
+This script generates two output tsv files in popgen/test_input/
+	First output (true_population.csv) has true ancestry information (pop1, pop2). Refers to which true
+	 population the SNP was picked from to create the virtual admixed individual
+	Second output (test_SNPs_ALLELE_vcf.txt) is a subset of the vcf file with only 10 admixed individuals.
+	 Thus, it has 0 or 1 for each SNP (reference or alt) for each admixed individual. Each admixed invidividual was
+	 created from 2 homologous "parents" (really one of the two split chromsomes of each original parent individual)
+	 Whether the SNP was from a pop1 or pop2 individual is found in the first output file
+'''
+
 import numpy as np
 import pandas as pd
 
@@ -20,8 +34,8 @@ def create_test_chromosomes(chr_strands, pops, ref_IDs, num_switch):
 
 	test_chr = np.zeros(len(chr_strands), dtype=int)
 	true_chr = np.array([''] * len(chr_strands), dtype='<U4') ### need to specify max string length
-	for j in range(len(pops)):
-		for i in range(j, len(test_chr_idx_start), len(pops)):
+	for j in range(len(pops)):	# pops = 2
+		for i in range(j, len(test_chr_idx_start), len(pops)):	#
 			test_chr[start[i] : stop[i]] = chr_strands[ref_IDs[j]][start[i] : stop[i]]
 			true_chr[start[i] : stop[i]] = pops[j]
 
@@ -90,12 +104,18 @@ if __name__ == '__main__':
 	test_chr = create_test_chromosome_set(all_chr_strands, {'pop1' : sourcepop1_ids, 'pop2' : sourcepop2_ids}, num_admixed_chromosomes)
 
 	ancestry_df = pd.DataFrame(all_chr_strands[all_chr_strands.columns[:9]])
+	# homologous_df = pd.DataFrame(all_chr_strands[all_chr_strands.columns[:9]])
 	chrom_df = pd.DataFrame(all_chr_strands[all_chr_strands.columns[:9]])
-	
+
 	for (test, true), id_pair in zip(*test_chr):
 		name = '-'.join(id_pair).replace('_', '-')
 		ancestry_df[name] = true
 		chrom_df[name] = test
+		# homologous_df[name] = "{0}|{0}".format(test)
 
-	ancestry_df.to_csv('test_input/CEU_YRI_test_cases_true_ancestry_try2_mm.csv', sep='\t', index=False)
-	chrom_df.to_csv('test_input/CEU_YRI_test_cases_chrom_try2_mm.csv', sep='\t', index=False)
+	# @Todo should we create a homolgoous vcf fille as well for consistency? We only make an allele file here.
+	# ancestry_df.to_csv('test_input/CEU_YRI_true_population.csv', sep='\t', index=False)
+	# chrom_df.to_csv('test_input/CEU_YRI_test_SNPs_ALLELE_vcf.txt', sep='\t', index=False)
+	ancestry_df.to_csv('test_input/CEU_YRI_true_population.csv', sep='\t', index=False)
+	chrom_df.to_csv('test_input/CEU_YRI_test_SNPs_ALLELE_vcf.txt', sep='\t', index=False)
+	# homologous_df.to_csv('test_input/CEU_YRI_test_SNPs_homologous.vcf', sep='\t', index=False)
