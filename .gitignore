@@ -1,3 +1,7 @@
 .idea
 data/vcf
 pops_data
+popgen_plots
+test_input
+.DS_Store
+bin/bashScripts/new/.DS_Store

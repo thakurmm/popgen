@@ -44,7 +44,7 @@ ALL scripts below must be run from the top level `popgen` folder
      for the populations for which we extracted the IDs in the previous step, in (pops)_ID.txt file.
      The output file is a combined file across ALL the populations of interest. The breakup of this file into
      the individual populations is done in a later step.
-
+     
     - Use the bash script: `bin/bashScripts/new/select_populations.sh`.
 	   - Script runtime for Chr22: about 8 minutes.
 		- Calls:
@@ -64,7 +64,7 @@ ALL scripts below must be run from the top level `popgen` folder
 			- admixture
 			- plink2
 			- vcftools
-	- Input data (in vcf folder): `chr22.phase3.ASW_CEU_YRI.SNPs.recode.vcf`
+	- Input data (in pops_data folder): `chr22.phase3.ASW_CEU_YRI.SNPs.recode.vcf`
 	- Output: 
 		- `chr22.ASW_CEU_YRI.SNPs.homologous.25k.2.Q`
 		- `chr22.ASW_CEU_YRI.SNPs.homologous.25k.2.P`
@@ -73,7 +73,7 @@ ALL scripts below must be run from the top level `popgen` folder
 		- `chr22.ASW_CEU_YRI.SNPs.homologous.25k.bed`
 		- `chr22.phase3.ASW_CEU_YRI.SNPs.homologous.txt`
 
-4. Run `create_admixed_chromosomes` to parse the output of `split_homologous_chr.py` (which is called as part of the previous step) and create an admixed training set.
+4. Run `create_admixed_chromosomes.py` to parse the output of `split_homologous_chr.py` (which is called as part of the previous step) and create an admixed training set.
 
     In this script, we will be breaking up the "combined" vcf file from the previous step, into multiple VCF files per population of interest.
     This is where we use the list of sampleIds per population created in the 1st step above.
@@ -81,7 +81,7 @@ ALL scripts below must be run from the top level `popgen` folder
 		- In `SampleIDs/` directory: two lists of sample IDs, one for each training population.
 		- In `data/` directory: source of genetic data, e.g. `chr22.phase3.ASW_CEU_YRI.SNPs.homologous.txt`
 	- Output data:
-		- In `data/admixed/` directory:
+		- In `pops_data/admixed/` directory:
 			- admixed training set, in two forms:
 				- `CEU_YRI_admixed_40admixed_100pure_ALLELE_vcf.txt`
 				- `CEU_YRI_admixed_40admixed_100pure_HOMOLOGOUS.vcf`
