@@ -10,7 +10,7 @@ set -x # echo command before running
 # which means, use ALL the entries from "test_filename"
 # num_test must be <= number of entries in test_filename OR just -1
 
-python bin/pythonScripts/Test_Local_Ancestry_Inference_ASW_from_3Pops.py \
+python3 bin/pythonScripts/Test_Local_Ancestry_Inference_ASW_from_3Pops.py \
     --reference_filename pops_data/admixed/CEU_YRI_admixed_10admixed_300pure_ALLELE_vcf.txt \
     --all_admix_filename pops_data/admixture/CEU_YRI_admixed_10admixed_300pure.2.Q \
     --chrom_admix_filename pops_data/admixture/CEU_YRI_admixed_10admixed_300pure.2.Q \

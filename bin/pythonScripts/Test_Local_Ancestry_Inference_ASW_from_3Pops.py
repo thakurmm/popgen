@@ -48,7 +48,8 @@ import time
 import numpy as np
 import pandas as pd
 
-# MOHIT from bin.pythonScripts import Chr_kmer_Informative_SNPs_Haploid_HMM as HMM
+# from bin.pythonScripts import Chr_kmer_Informative_SNPs_Haploid_HMM as HMM
+import Chr_kmer_Informative_SNPs_Haploid_HMM as HMM
 
 pd.set_option('display.float_format', lambda x: '%.4f' % x)
 
@@ -127,7 +128,7 @@ def test_chromosomes_sliding_windows(kmer, seed, num_windows, num_test, train_fi
 	### @ToDo Question: Why are we going through the steps above if what we are getting below, is simply the columns ordered by the mean (or sum) of the single_chromosomes?
 	ADMIX = single_chromosome_ADMIX_unordered.reindex(admix_chr_diff_all.sort_values(ascending=True).index, axis=1)
 	
-	### columns: [0, 1, 2] -> ['pop1', 'pop2', 'pop3'], where freq(pop1) > freq(pop2) > freq(pop3)
+	### columns: [0, 1, 2 ...] -> ['pop1', 'pop2', 'pop3' ...], where freq(pop1) > freq(pop2) > freq(pop3)
 	ADMIX.columns = ['pop{}'.format(i) for i in range(1, len(ADMIX.columns) + 1)]
 
 	### add labels to each row (sample chromosome)
@@ -146,104 +147,107 @@ def test_chromosomes_sliding_windows(kmer, seed, num_windows, num_test, train_fi
 	print(train_chr_strands_with_test.describe())
 	# So, at this point ADMIX is a dataframe with three columns - the first column is the admixed individuals and the first row is just a header row (with pop1 and pop2)
 	# and the 2nd column is the proportions for pop1 and 3rd for pop2.
-		
-	# MOHIT ----- Uptil here Jul 15
-	# train_chr_strands_top = HMM.select_informative_SNPs(train_chr_strands, prob_pops, ADMIX, diff_quantile=0.1)
-	# train_chr_strands_with_test_top = train_chr_strands_with_test.ix[train_chr_strands_top.index, :]
-	# 
-	# all_windows = dict()
-	# all_windows_prob = dict()
-	# 
-	# for window in range(num_windows):
-	# 	print('\nperforming inference for window {} of {}'.format(window + 1, num_windows))
-	# 
-	# 	new_strands_with_test_top = train_chr_strands_with_test_top.iloc[window:] # drop first $window rows (do nothing for window=0)
-	# 
-	# 	### group SNPs (combine rows) into k-size windows
-	# 	chr_strand_with_test_substrings = HMM.create_kmer_haplotypes(new_strands_with_test_top, kmer)
-	# 	# chr_strand_substrings = HMM.create_kmer_haplotypes(new_strands_top, kmer) #new
-	# 
-	# 	### generate all k-length bit strings. 
-	# 	all_haplotypes = HMM.all_kmer_haplotypes(kmer)
-	# 
-	# 	ADMIX_with_test = ADMIX.copy()
-	# 	for identifier in identifiers_to_use:
-	# 		ADMIX_with_test.loc[identifier] = (ADMIX.sum() / len(ADMIX))
-	# 
-	# 	log2_emission_matrices = HMM.create_emission_matrix(chr_strand_with_test_substrings, ADMIX_with_test, prob_pops, all_haplotypes)
-	# 	# log2_emission_matrices = HMM.create_emission_matrix(chr_strand_substrings, ADMIX, prob_pops, all_haplotypes)
-	# 	### getting empty entries in emission matrices when leaving out test chrs
-	# 
-	# 	### local ancestry inference ###
-	# 	inferences = HMM.both_directions_local_ancestry_prob(chr_strand_with_test_substrings, ADMIX, identifiers_to_use, log2_emission_matrices, kmer, recomb_rate=0.001)
-	# 
-	# 	### combine forward ancestry with backward ancestry, with a value of 'unknown' for positions that differ between the forward and backward inferences
-	# 	all_windows[window] = inferences['both_ancestry']
-	# 	all_windows_prob[window] = inferences['both_probs']
-	# 
-	# all_prob = pd.concat(all_windows_prob.values())
-	# ### The next two lines are used for filling in uninformative SNPs before the first informative SNP and after the last one.
-	# ### Using values of 1 means the resulting confidence for these areas will be cut in half, but the ancestry calls will not be changed.
-	# all_prob.loc[-1] = 1
-	# all_prob.loc[train_chr_strands_with_test.index[-1] + 1] = 1
-	# all_prob.sort_index(inplace=True)
-	# 
-	# 
-	# complete_ancestry_probs = pd.DataFrame(train_chr_strands_with_test['POS'])
-	# ### add columns for each person.
-	# # TODO: dtypes for these columns will be 'object' after adding 'pop1'/'pop2' (dtype is float64 upon creation) - not too efficient.
-	# #       Can't use fixed-length strings (https://stackoverflow.com/a/34884078/5377941) so only other option is to represent population with a number
-	# complete_ancestry_probs = complete_ancestry_probs.reindex(columns=['POS'] + list(all_prob.columns[2:]))
-	# ### this will hold population inferences, based on contents of complete_ancestry_probs
-	# complete_ancestry = complete_ancestry_probs.copy()
-	# 
-	# ### fill in informative SNPs in complete_ancestry_probs
-	# ### this is working (and takes about two minutes with 10 samples on chromosome 22). TODO: profile
-	# ### skip [-1] window and start with [-1, all_prob.index[0]] window
-	# print('\n\naveraging windows for informative SNPs')
-	# inf_start = time.time()
-	# for index, windows in enumerate(itertools.islice(HMM.get_sliding_windows(all_prob.index, num_windows), 1, None)):
-	# 	if index % 1000 == 0:
-	# 		print('on window {} of ~{}'.format(index, all_prob.shape[0]))
-	# 	# avg = all_prob.loc[windows].iloc[:, 2:].mean() ### get the relevant contiguous windows in all_prob, then discard 'POS_start/end' columns
-	# 	avg = all_prob.loc[windows].iloc[:, 2:].prod() ### averaging fix
-	# 	complete_ancestry_probs.ix[windows[-1], 1:] = avg
-	# inf_end = time.time()
-	# print('\ninformative SNPs took {:.1f} seconds'.format(inf_end - inf_start))
-	# 
-	# ### fill in uninformative SNPs by averaging the relevant windows
-	# ### skip [-1] window and start with [-1, all_prob.index[0]] window
-	# print('\n\naveraging windows for uninformative SNPs')
-	# uninf_start = time.time()
-	# for index, windows in enumerate(itertools.islice(HMM.get_sliding_windows(all_prob.index, num_windows - 1), 1, None)):
-	# 	if index % 1000 == 0:
-	# 		print('on window {} of ~{}'.format(index, all_prob.shape[0]))
-	# 	# avg = all_prob.loc[windows].iloc[:, 2:].mean()
-	# 	avg = all_prob.loc[windows].iloc[:, 2:].prod() ### averaging fix
-	# 	### Seems like I can't broadcast one row to multiple rows.
-	# 	### Some more efficient methods are listed here: https://stackoverflow.com/questions/18771963/pandas-efficient-dataframe-set-row
-	# 	### TODO: check performance for this section
-	# 	### TODO: try:
-	# 	###			complete_ancestry_probs.ix[windows[-2] + 1 : windows[-1], 1:] = itertools.repeat(avg, windows[-1] - (windows[-2] + 1))
-	# 	for row in range(windows[-2] + 1, windows[-1]):
-	# 		complete_ancestry_probs.ix[row, 1:] = avg
-	# uninf_end = time.time()
-	# print('\nuninformative SNPs took {:.1f} seconds'.format(uninf_end - uninf_start))
-	# 
-	# ### drop final row, added in line above: `all_prob.loc[train_chr_strands_with_test.index[-1] + 1] = 1`
-	# complete_ancestry_probs.drop(complete_ancestry_probs.index[-1], inplace=True)
-	# 
-	# for column in complete_ancestry_probs.columns[1:]: ### for each sample:
-	# 	complete_ancestry[column] = np.where(complete_ancestry_probs[column] > 1, 'pop2', 'pop1')
-	# 
-	# print('saving inferences to {}.txt'.format(out_filename))
-	# complete_ancestry.to_csv(out_filename + '.txt', sep='\t', index=False)
-	# 
-	# overall_end_time = time.time()
-	# time_diff = round(overall_end_time - overall_start_time, 1)
-	# print('computed ancestry for {} chromosomes in {} seconds'.format(len(identifiers_to_use), time_diff))
-	# 
-	# # complete_ancestry_top = complete_ancestry.ix[chr_strands_with_test_top.index]
+	# e.g.
+	#                           pop1        pop2
+	# NA121815-1-NA18864-2-0    0.5894      0.4106
+	# NA121913-1-NA19852-2-0    0.1822      0.8178
+
+	train_chr_strands_top = HMM.select_informative_SNPs(train_chr_strands, prob_pops, ADMIX, diff_quantile=0.1)
+	train_chr_strands_with_test_top = train_chr_strands_with_test.ix[train_chr_strands_top.index, :]
+
+	all_windows = dict()
+	all_windows_prob = dict()
+
+	for window in range(num_windows):
+		print('\nperforming inference for window {} of {}'.format(window + 1, num_windows))
+
+		new_strands_with_test_top = train_chr_strands_with_test_top.iloc[window:] # drop first $window rows (do nothing for window=0)
+
+		### group SNPs (combine rows) into k-size windows
+		chr_strand_with_test_substrings = HMM.create_kmer_haplotypes(new_strands_with_test_top, kmer)
+		# chr_strand_substrings = HMM.create_kmer_haplotypes(new_strands_top, kmer) #new
+
+		### generate all k-length bit strings. 
+		all_haplotypes = HMM.all_kmer_haplotypes(kmer)
+
+		ADMIX_with_test = ADMIX.copy()
+		for identifier in identifiers_to_use:
+			ADMIX_with_test.loc[identifier] = (ADMIX.sum() / len(ADMIX))
+
+		log2_emission_matrices = HMM.create_emission_matrix(chr_strand_with_test_substrings, ADMIX_with_test, prob_pops, all_haplotypes)
+		# log2_emission_matrices = HMM.create_emission_matrix(chr_strand_substrings, ADMIX, prob_pops, all_haplotypes)
+		### getting empty entries in emission matrices when leaving out test chrs
+
+		### local ancestry inference ###
+		inferences = HMM.both_directions_local_ancestry_prob(chr_strand_with_test_substrings, ADMIX, identifiers_to_use, log2_emission_matrices, kmer, recomb_rate=0.001)
+
+		### combine forward ancestry with backward ancestry, with a value of 'unknown' for positions that differ between the forward and backward inferences
+		all_windows[window] = inferences['both_ancestry']
+		all_windows_prob[window] = inferences['both_probs']
+
+	all_prob = pd.concat(all_windows_prob.values())
+	### The next two lines are used for filling in uninformative SNPs before the first informative SNP and after the last one.
+	### Using values of 1 means the resulting confidence for these areas will be cut in half, but the ancestry calls will not be changed.
+	all_prob.loc[-1] = 1
+	all_prob.loc[train_chr_strands_with_test.index[-1] + 1] = 1
+	all_prob.sort_index(inplace=True)
+
+
+	complete_ancestry_probs = pd.DataFrame(train_chr_strands_with_test['POS'])
+	### add columns for each person.
+	# TODO: dtypes for these columns will be 'object' after adding 'pop1'/'pop2' (dtype is float64 upon creation) - not too efficient.
+	#       Can't use fixed-length strings (https://stackoverflow.com/a/34884078/5377941) so only other option is to represent population with a number
+	complete_ancestry_probs = complete_ancestry_probs.reindex(columns=['POS'] + list(all_prob.columns[2:]))
+	### this will hold population inferences, based on contents of complete_ancestry_probs
+	complete_ancestry = complete_ancestry_probs.copy()
+
+	### fill in informative SNPs in complete_ancestry_probs
+	### this is working (and takes about two minutes with 10 samples on chromosome 22). TODO: profile
+	### skip [-1] window and start with [-1, all_prob.index[0]] window
+	print('\n\naveraging windows for informative SNPs')
+	inf_start = time.time()
+	for index, windows in enumerate(itertools.islice(HMM.get_sliding_windows(all_prob.index, num_windows), 1, None)):
+		if index % 1000 == 0:
+			print('on window {} of ~{}'.format(index, all_prob.shape[0]))
+		# avg = all_prob.loc[windows].iloc[:, 2:].mean() ### get the relevant contiguous windows in all_prob, then discard 'POS_start/end' columns
+		avg = all_prob.loc[windows].iloc[:, 2:].prod() ### averaging fix
+		complete_ancestry_probs.ix[windows[-1], 1:] = avg
+	inf_end = time.time()
+	print('\ninformative SNPs took {:.1f} seconds'.format(inf_end - inf_start))
+
+	### fill in uninformative SNPs by averaging the relevant windows
+	### skip [-1] window and start with [-1, all_prob.index[0]] window
+	print('\n\naveraging windows for uninformative SNPs')
+	uninf_start = time.time()
+	for index, windows in enumerate(itertools.islice(HMM.get_sliding_windows(all_prob.index, num_windows - 1), 1, None)):
+		if index % 1000 == 0:
+			print('on window {} of ~{}'.format(index, all_prob.shape[0]))
+		# avg = all_prob.loc[windows].iloc[:, 2:].mean()
+		avg = all_prob.loc[windows].iloc[:, 2:].prod() ### averaging fix
+		### Seems like I can't broadcast one row to multiple rows.
+		### Some more efficient methods are listed here: https://stackoverflow.com/questions/18771963/pandas-efficient-dataframe-set-row
+		### TODO: check performance for this section
+		### TODO: try:
+		###			complete_ancestry_probs.ix[windows[-2] + 1 : windows[-1], 1:] = itertools.repeat(avg, windows[-1] - (windows[-2] + 1))
+		for row in range(windows[-2] + 1, windows[-1]):
+			complete_ancestry_probs.ix[row, 1:] = avg
+	uninf_end = time.time()
+	print('\nuninformative SNPs took {:.1f} seconds'.format(uninf_end - uninf_start))
+
+	### drop final row, added in line above: `all_prob.loc[train_chr_strands_with_test.index[-1] + 1] = 1`
+	complete_ancestry_probs.drop(complete_ancestry_probs.index[-1], inplace=True)
+
+	for column in complete_ancestry_probs.columns[1:]: ### for each sample:
+		complete_ancestry[column] = np.where(complete_ancestry_probs[column] > 1, 'pop2', 'pop1')
+
+	print('saving inferences to {}.txt'.format(out_filename))
+	complete_ancestry.to_csv(out_filename + '.txt', sep='\t', index=False)
+
+	overall_end_time = time.time()
+	time_diff = round(overall_end_time - overall_start_time, 1)
+	print('computed ancestry for {} chromosomes in {} seconds'.format(len(identifiers_to_use), time_diff))
+
+	# complete_ancestry_top = complete_ancestry.ix[chr_strands_with_test_top.index]
 
 
 if __name__ == '__main__':

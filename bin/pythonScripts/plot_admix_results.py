@@ -12,13 +12,13 @@ r_squared_lst = []
 
 def plot_admix_results(admixed, pure):
 	estimates = pd.read_csv(
-		'data/admixture/new/admix/CEU_YRI_admixed_{}admixed_{}pure.2.Q'.format(admixed, pure),
+		'pops_data/admixture/CEU_YRI_admixed_{}admixed_{}pure.2.Q'.format(admixed, pure),
 		header=None,
 		delim_whitespace=True,
 		names=['x','y'])
 
 	true = pd.read_csv(
-		'data/admixed/CEU_YRI_admixed_{}admixed_{}pure_proportions.txt'.format(admixed, pure),
+		'pops_data/admixed/CEU_YRI_admixed_{}admixed_{}pure_proportions.txt'.format(admixed, pure),
 		header=None,
 		delim_whitespace=True,
 		names=['x','y'])
@@ -40,7 +40,7 @@ def plot_admix_results(admixed, pure):
 
 	plt.suptitle('admix results with {} test chromosomes and {} total pure chromosomes'.format(admixed, pure))
 	# plt.show()
-	plt.savefig('etc/admix/{}admixed_{}totalpure.png'.format(admixed, pure))
+	plt.savefig('etc/admix/{}admixed_{}totalpure_MM.png'.format(admixed, pure))
 	plt.clf()
 
 def plot_r_squared():
@@ -60,38 +60,40 @@ def plot_r_squared():
 
 	plt.grid()
 
-	filename = 'etc/admix/r_squared_results.png'
+	filename = 'etc/admix/r_squared_results_MM.png'
 	print('saving r^2 figure to {}'.format(filename))
 	plt.savefig(filename)
 	
 	plt.show()
 
 to_plot = (
-	(100, 20),
-	(100,30),
-	(100,40),
-	
-	(200,20),
-	(200,30),
-	(200,40),
-	(200,80),
-
-	(250,20),
-
-	(300,20),
-	(300,30),
-	(300,40),
-
-	(350,20),
-	
-	(400,20),
-	(400,30),
-	(400,40),
-	
-	(500, 0),
-	(500, 20),
-	(500,40),
-	(500, 100),
+	(10,300),
+	(200,20)
+	# (100, 20),
+	# (100,30),
+	# (100,40),
+	# 
+	# (200,20),
+	# (200,30),
+	# (200,40),
+	# (200,80),
+	# 
+	# (250,20),
+	# 
+	# (300,20),
+	# (300,30),
+	# (300,40),
+	# 
+	# (350,20),
+	# 
+	# (400,20),
+	# (400,30),
+	# (400,40),
+	# 
+	# (500, 0),
+	# (500, 20),
+	# (500,40),
+	# (500, 100),
 	#(500, 200),
 )
 
