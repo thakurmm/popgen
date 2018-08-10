@@ -1,23 +1,32 @@
 #!/bin/bash
 
 start_chr=22
+stop_chr=22
+mix_pop="ASW"
 pure_pop1="CEU"
 pure_pop2="YRI"
-mix_pop="ASW"
 logf="run_pipeline.log"
 errf="run_pipeline.err"
 
+cat $errf >> $errf.full
+cat $logf >> $logf.full
+rm $errf $logf
 num_admixed_array=(10 200 200 250 250 300 300 350 350 400 400)
 num_pure_array=(300 30  20  30  20  30  20  30  20  30  20)
-num_admixed_array=(5 10)
-num_pure_array=(200 300)
+
+# num_admixed_array=(5)
+# num_pure_array=(200)
 num_array_elems=${#num_admixed_array[@]}
 num_recombinations=8
 
-echo "$(date): Starting pipeline" | tee -a $logf >> $errf
 
-# data/get_vcf_data.sh $start_chr >> $logf 2>> $errf
-# echo "$(date): get_vcf_data.sh done" | tee -a $logf >> $errf
+## Main starts here
+echo "$(date): Starting pipeline" | tee -a $logf >> $errf
+bin/bashScripts/new/get_vcf_data.sh $start_chr $stop_chr>> $logf 2>> $errf
+echo "$(date): get_vcf_data.sh done" | tee -a $logf >> $errf
+
+
+# -----------------------
 
 if [ -f SampleIDs/igsr_samples.tsv ]; then
 	SAMPLE_IDS="SampleIDs/igsr_samples.tsv"
@@ -28,14 +37,30 @@ else
 	echo "Need to download the SampleIDs for all populations"
 	exit 1
 fi
-python bin/pythonScripts/write_sample_IDs.py SampleIDs/igsr_samples.tsv ${mix_pop} ${pure_pop1} ${pure_pop2} >> $logf 2>> $errf
+
+python bin/pythonScripts/write_sample_IDs.py ${SAMPLE_IDS} ${mix_pop} ${pure_pop1} ${pure_pop2} >> $logf 2>> $errf
 echo "$(date): write_sample_IDs.py done" | tee -a $logf >> $errf
 
-bin/bashScripts/new/select_populations.sh ${start_chr} ${pure_pop1} ${pure_pop2} ${mix_pop} >> $logf 2>> $errf
-echo "$(date): select_populations.sh done" | tee -a $logf >> $errf
+python bin/pythonScripts/write_sample_IDs.py ${SAMPLE_IDS} ${pure_pop1} ${pure_pop2} >> $logf 2>> $errf
+echo "$(date): write_sample_IDs.py done" | tee -a $logf >> $errf
 
-bin/bashScripts/new/clean_chr_data_for_local_ancestry_split_new.sh ${start_chr} ${pure_pop1} ${pure_pop2} ${mix_pop} >> $logf 2>> $errf
+# ----------------------
+
+bin/pythonScripts/select_populations.py ${start_chr} ${stop_chr} ${mix_pop} ${pure_pop1} ${pure_pop2}  >> $logf 2>> $errf
+echo "$(date): select_populations.py done" | tee -a $logf >> $errf
+
+bin/pythonScripts/select_populations.py ${start_chr} ${stop_chr} ${pure_pop1} ${pure_pop2}  >> $logf 2>> $errf
+echo "$(date): select_populations.py done" | tee -a $logf >> $errf
+
+
+#@ToDo move below for STRUCTUREpainter part
+#python bin/pythonScripts/write_sample_IDs.py ${SAMPLE_IDS} ${pure_pop1} ${pure_pop2} >> $logf 2>> $errf
+#bin/pythonScripts/select_populations.py ${start_chr} ${stop_chr} ${pure_pop1} ${pure_pop2}  >> $logf 2>> $errf
+
+# bin/bashScripts/new/clean_chr_data_for_local_ancestry_split_new.sh ${start_chr} ${stop_chr} ${mix_pop} ${pure_pop1} ${pure_pop2} >> $logf 2>> $errf
+bin/bashScripts/new/clean_chr_data_for_local_ancestry_split_new.sh ${start_chr} ${stop_chr} ${pure_pop1} ${pure_pop2} >> $logf 2>> $errf
 echo "$(date): clean_chr_data_for_local_ancestry_split_new.sh done" | tee -a $logf >> $errf
+
 
 mkdir -p pops_data/admixed > /dev/null 2> /dev/null
 mkdir -p pops_data/admixture/bed > /dev/null 2> /dev/null
@@ -47,9 +72,9 @@ do
 
 	python bin/pythonScripts/create_admixed_chromosomes.py \
 		--chr ${start_chr} \
-		--num_admixed_chromosomes  $num_admixed \
+		--num_admixed $num_admixed \
 		--num_anchor $num_pure \
-		--pops ${mix_pop} ${pure_pop1} ${pure_pop2} \
+		--pops ${pure_pop1} ${pure_pop2} \
 		--num_recombinations ${num_recombinations} >> $logf 2>> $errf
 	
     admixed_output_homologous_file="pops_data/admixed/${pure_pop1}_${pure_pop2}_admixed_${num_admixed}admixed_${num_pure}pure_HOMOLOGOUS.vcf"
@@ -67,13 +92,13 @@ do
 	mv ${pure_pop1}_${pure_pop2}_admixed_${num_admixed}admixed_${num_pure}pure.2.* pops_data/admixture	
 
 	#./create_all_admixed_chromosomes.sh >> $logf 2>> $errf
-	echo "$(date): create_all_admixed_chromosomes.sh done" | tee -a $logf >> $errf
+	echo "$(date): create_all_admixed_chromosomes.py done" | tee -a $logf >> $errf
 	# ------------------------------
 
 	python bin/pythonScripts/generate_test_set.py \
-		--num_admixed_chromosomes ${num_admixed} \
+		--num_admixed ${num_admixed} \
 		--chr ${start_chr} \
-		--pops ${mix_pop} ${pure_pop1} ${pure_pop2} \
+		--pops ${pure_pop1} ${pure_pop2} \
 		--num_recombinations ${num_recombinations} >> $logf 2>> $errf
 
 	# python bin/pythonScripts/generate_test_set.py >> $logf 2>> $errf
@@ -93,8 +118,6 @@ do
 	#./test_ancestry.sh >> $logf 2>> $errf
 	echo "$(date): test_ancestry.sh done" | tee -a $logf >> $errf
 	# ------------------------------
-
-	prefix="${pure_pop1}_${pure_pop2}_admixed_${num_admixed}admixed_${num_pure}pure"
 	
 	python3 bin/pythonScripts/evaluate_inferences.py \
 		--inferences_filename results/source=${prefix}_ALLELE_vcf.txt_test=${pure_pop1}_${pure_pop2}_${num_admixed}test_SNPs_ALLELE_vcf.txt.txt \
@@ -102,5 +125,5 @@ do
 		--save_plot_filename results/${prefix}_plot_5chroms_try2point5.png >> $logf 2>> $errf
 		
 	# ./evaluate_inferences.sh >> $logf 2>> $errf
-	echo "$(date): ./evaluate_inferences.sh done" | tee -a $logf >> $errf
+	echo "$(date): evaluate_inferences.sh done" | tee -a $logf >> $errf
 done

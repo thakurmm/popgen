@@ -8,25 +8,27 @@
 
 # @ToDo: Why do we have the variable names as train, test1 and test2. Why not pop1, pop2 and pop3 ?
 # @ToDo: Handle the linkage of pop input to the SampleIDs files so it is not always ASW_CEU_YRI
-train="ASW"
-test1="CEU"
-test2="YRI"
+start_chr=$1
+stop_chr=$2
+shift 2
+pops_list=$*
 
-pops="${train}_${test1}_${test2}"
+
+pops=$(echo $pops_list | sed "s/ /_/g")
 
 pops_folder_base="pops_data/${pops}_Data"
 
-# for i in {1..22}
-for (( i=22; i<=22; i++ )); do
+for (( i=$start_chr; i<=$stop_chr; i++ )); do
 	echo "###### Analyzing Chr$i ######"
 	chr_folder_loc="${pops_folder_base}/Chr${i}"
+	orig_chr_recoded_vcf="${chr_folder_loc}/chr${i}.phase3.${pops}.SNPs.recode.vcf"
+
 
 	tmp_folder=${chr_folder_loc}/tmp
 	if [ ! -d $tmp_folder ]; then
 	    mkdir -p $tmp_folder
 	fi
 
-	orig_chr_recoded_vcf="${chr_folder_loc}/chr${i}.phase3.${pops}.SNPs.recode.vcf"
 	working_chr_recoded_vcf="${tmp_folder}/chr${i}.phase3.${pops}.SNPs.recode.vcf"
 	tmp_chr_header_file="${tmp_folder}/chr${i}.phase3.${pops}.header.txt"
 
@@ -40,8 +42,8 @@ for (( i=22; i<=22; i++ )); do
 	python3 bin/pythonScripts/split_homologous_chr.py $working_chr_recoded_vcf
 
     # The two files below will be created in chr_folder_loc folder
-	allele_filename=$(echo $working_chr_recoded_vcf | sed 's?recode.vcf?allele.vcf?g')
-	homologous_filename=$(echo $working_chr_recoded_vcf | sed 's?recode.vcf?homologous.vcf?g')
+	allele_filename=$(echo $working_chr_recoded_vcf | sed 's/recode.vcf/allele.vcf/g')
+	homologous_filename=$(echo $working_chr_recoded_vcf | sed 's/recode.vcf/homologous.vcf/g')
 	echo "finished running Python script"
 
 	# What we have so far

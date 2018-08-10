@@ -8,7 +8,7 @@ This script should be run as part of create_all_admixed_chromsomes.sh. The argum
 parses the output of `split_homologous_chr.py` and creates a number of admixed genomes from the two given populations
 - run the script:
     mkdir -p pops_data/admixed
-    python create_admixed_chromosomes.py --num_admixed_chromosomes 10 --num_anchor 300 --source_pops CEU YRI
+    python create_admixed_chromosomes.py --num_admixed_chromosomes 10 --num_anchor_chromosomes 300 --source_pops CEU YRI
 
 Note: The above is almost what create_all_admixed_chromsomes.sh does, except that ALSO runs admixture and creates an
 admixture folder in pops_data. So this should not really be run directly.
@@ -59,16 +59,16 @@ from collections import defaultdict
 #
 
 #@ToDo Can we replace this with a logic such as
-# 1. Get NUM_RECOMBINATIONS random numbers from 0 to len(chr_strands['POS']
+# 1. Get num_recombinations random numbers from 0 to len(chr_strands['POS']
 # 2. For each random position from chr_strands['POS'], write the 'POS' value into recombination_spots tuple
 # 3.       and write this random position as the 'index' (+1 for 1-index reference) in the stop variable (type = pandas.Series) below
 def create_test_chromosome(chr_strands, pops, ref_IDs):
     ### sample from SNPs
     recombination_spots = (
-        # This will grab NUM_RECOMBINATIONS unique values from the POS column in the allele.vcf file, which is read into
+        # This will grab num_recombinations unique values from the POS column in the allele.vcf file, which is read into
         # chr_strands using the pandas.parse_csv functions. replace=False ensures you do not get duplicates.
-        # The list is sorted and re-indexed [0 .... NUM_RECOMBINATIONS] following the random sampling and sorting
-        chr_strands['POS'].sample(NUM_RECOMBINATIONS, replace=False).sort_values().reset_index(drop=True)
+        # The list is sorted and re-indexed [0 .... num_recombinations] following the random sampling and sorting
+        chr_strands['POS'].sample(num_recombinations, replace=False).sort_values().reset_index(drop=True)
     )
 
     # The command below is creating a pandas.Series object, with the entries as the 1-reference position numbers of the
@@ -77,12 +77,12 @@ def create_test_chromosome(chr_strands, pops, ref_IDs):
     # 53374 is the 1-indexed position (not 0 indexed) where 34403487 is found in the chr_strands array
     # The lambda function gets the list index in chr_strands where the condition is TRUE
     # The result of LAMBDA is (don't try to decode this ..... but this is what it does) that stop is a panda.series object
-    #    with "NUM_RECOMBINATIONS" entries, where each entry is the position in the allele.vcf file or chr_strands list
+    #    with "num_recombinations" entries, where each entry is the position in the allele.vcf file or chr_strands list
     #    where the recombination_spots POS value is found in the file.
     # For e.g. if recombination_spots[0] == 34403487  then stop[0] = 53374
     # & if recombination_spots[1] == 36891858  then stop[1] = 62087
     # @ToDo Can we devise a simpler method to do this ..... this pandas --- lambda combo is very very confusing
-    chr_position_list = pandas.Series(range(NUM_RECOMBINATIONS)).map(lambda x: np.where(chr_strands['POS'] == recombination_spots[x])[0][0] + 1)
+    chr_position_list = pandas.Series(range(num_recombinations)).map(lambda x: np.where(chr_strands['POS'] == recombination_spots[x])[0][0] + 1)
     # The line below is simply adding a (0,0) entry at the start of the "stop" Series above
     start = pandas.concat([pandas.Series(0), chr_position_list], ignore_index=True)
     # The line below is simply adding a (len(chr_strands),len(chr_strands)) entry at the end of the "stop" Series above (not the start series)
@@ -106,18 +106,18 @@ def create_test_chromosome(chr_strands, pops, ref_IDs):
 # Simple wrapper to call create_pure_chromosomes_from_one_pop function twice, once for each pure population list
 # Returns a list with two arguments, first being a list of lists as pure chromosomes for a set of individuals from the two populations
 # and 2nd as the list of individuals. We would always return two rows from this function - pop1 row and pop2 row.
-def create_pure_chromosomes_from_all_pops(chr_strands, input_num_anchor, pop1_ids, pop2_ids):
-    return [create_pure_chromosomes_from_one_pop(chr_strands, int(input_num_anchor/2.0), popIDs) for popIDs in [pop1_ids, pop2_ids]]
+def create_pure_chromosomes_from_all_pops(chr_strands, input_num_anchor_chromosomes, pop1_ids, pop2_ids):
+    return [create_pure_chromosomes_from_one_pop(chr_strands, int(input_num_anchor_chromosomes/2.0), popIDs) for popIDs in [pop1_ids, pop2_ids]]
 
 
 # This function is called for each set of distinct populations at a time. 
 # The function will create a list of "pure" choromosome list for a random list of individuals from the population passed to it
 # The assert statement below ensures that we use the minimum of the two lengths from the two populations, so that we get
-# exactly num_anchor entries after two iterations of this function.
-def create_pure_chromosomes_from_one_pop(chr_strands, half_input_num_anchor, popIDs):
-    assert half_input_num_anchor <= len(popIDs)
+# exactly num_anchor_chromosomes entries after two iterations of this function.
+def create_pure_chromosomes_from_one_pop(chr_strands, half_input_num_anchor_chromosomes, popIDs):
+    assert half_input_num_anchor_chromosomes <= len(popIDs)
 
-    IDs_to_use = np.random.choice(popIDs, size=half_input_num_anchor, replace=False)
+    IDs_to_use = np.random.choice(popIDs, size=half_input_num_anchor_chromosomes, replace=False)
     chroms = [chr_strands[popID] for popID in IDs_to_use]
     return [chroms, IDs_to_use]
 
@@ -164,57 +164,52 @@ def get_pop_IDs(filename):
 
 
 if __name__ == '__main__':
-    NUM_RECOMBINATIONS = 8 ### when creating offspring chromosomes
+    #np.random.seed(seed)
+    seed = 0
 
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--seed', help='random seed to use.', type=int, default=0)
-    parser.add_argument('--num_admixed_chromosomes', help='number of admixed chromosomes to create.', type=int)
-    parser.add_argument('--num_anchor', help='TOTAL number of pure chrosomes to create', type=int)
-    parser.add_argument('--source_pops',
-        help='population codes (e.g. "YRI CEU") for the two populations that will be used in creating the simulated test chromosomes',
+    parser.add_argument('--chr', help='chromosome to start on.', type=int, default=22)
+    parser.add_argument('--num_admixed', help='number of admixed chromosomes to create.', type=int)
+    parser.add_argument('--num_anchor', help='number of pure chromosomes to include', type=int)
+    parser.add_argument('--pops',
+        help='population codes (e.g. "CEU YRI") for the two populations that will be used in creating the simulated test chromosomes',
         nargs=2, required=True)
+    parser.add_argument('--num_recombinations', help='number of recombination events for each admixed chromosome', type=int)
 
     args = parser.parse_args()
+    chr_number = args.chr
+    num_admixed_chromosomes = args.num_admixed
+    num_anchor_chromosomes = args.num_anchor
+    pop1, pop2 = args.pops
+    num_recombinations = args.num_recombinations
 
-    seed = args.seed
-    num_admixed_chromosomes = args.num_admixed_chromosomes
-    num_anchor = args.num_anchor
-    sourcepop1, sourcepop2 = args.source_pops
-
-    np.random.seed(seed)
+    populations = pop1 + "_" + pop2
 
     # homologous_filename = '/home/greg/School/popgen/data/chr22.phase3.{}.SNPs.homologous.txt'.format('ASW_CEU_YRI') ### TODO: change this
-    populations = 'ASW_CEU_YRI'
-    chr_number=22
+
     #@ToDo the chr22.phase3 .... file should be renamed to just chr.phase3.... , because this is in the Chr21, Chr22 folder and so on
     allele_filename = 'pops_data/{}_Data/Chr{}/tmp/chr22.phase3.{}.SNPs.allele.vcf'.format(populations, chr_number, populations)
 
-    #sourcepop1_ids_filename = '/home/greg/School/popgen/SampleIDs/{}_Sample_IDs_haploid.txt'.format(sourcepop1)
-    #sourcepop2_ids_filename = '/home/greg/School/popgen/SampleIDs/{}_Sample_IDs_haploid.txt'.format(sourcepop2)
-    sourcepop1_ids_filename = 'SampleIDs/{}_Sample_IDs_haploid.txt'.format(sourcepop1)
-    sourcepop2_ids_filename = 'SampleIDs/{}_Sample_IDs_haploid.txt'.format(sourcepop2)
+    pop1_ids_filename = 'SampleIDs/{}_Sample_IDs_haploid.txt'.format(pop1)
+    pop2_ids_filename = 'SampleIDs/{}_Sample_IDs_haploid.txt'.format(pop2)
 
-    #out_basename = '/home/greg/School/popgen/data/admixed/{}_{}_admixed_{}admixed_{}pure'.format(sourcepop1, sourcepop2, num_admixed_chromosomes, num_anchor)
     # @ToDo might want to change this so the files don't go into the admixed folder in one big mess
-    out_basename = 'pops_data/admixed/{}_{}_admixed_{}admixed_{}pure'.format(sourcepop1, sourcepop2, num_admixed_chromosomes, num_anchor)
-    # out_filename = '/home/greg/School/popgen/data/admixed/{}_{}_admixed_n={}.vcf'.format(sourcepop1, sourcepop2, num_admixed_chromosomes)
-    #out_filename = out_basename + '.vcf' ### 0|0 0|0 1|1 0|0
-    #out_filename_homologous = out_basename + '_homologous.vcf' ### 0 0 1 0
+    out_basename = 'pops_data/admixed/{}_admixed_{}admixed_{}pure'.format(populations, num_admixed_chromosomes, num_anchor_chromosomes)
     out_filename_homologous = out_basename + '_HOMOLOGOUS.vcf' ### 0|0 0|0 1|1 0|0
     out_filename_allele = out_basename + '_ALLELE_vcf.txt' ### 0 0 1 0
-    #proportions_out_filename_homologous = '/home/greg/School/popgen/data/admixed/{}_{}_admixed_{}admixed_{}pure_proportions.txt'.format(sourcepop1, sourcepop2, num_admixed_chromosomes, num_anchor)
-    proportions_out_filename = 'pops_data/admixed/{}_{}_admixed_{}admixed_{}pure_proportions.txt'.format(sourcepop1, sourcepop2, num_admixed_chromosomes, num_anchor)
+
+    proportions_out_filename = 'pops_data/admixed/{}_admixed_{}admixed_{}pure_proportions.txt'.format(populations, num_admixed_chromosomes, num_anchor_chromosomes)
 
     # Get the population id for each population (CEU and YRI) into two list variables
-    sourcepop1_ids = get_pop_IDs(sourcepop1_ids_filename)
-    sourcepop2_ids = get_pop_IDs(sourcepop2_ids_filename)
+    pop1_ids = get_pop_IDs(pop1_ids_filename)
+    pop2_ids = get_pop_IDs(pop2_ids_filename)
 
     #all_chr_strands = pandas.read_csv(homologous_filename, sep='\t', header=0, comment='#')
     #@ToDo the allele_filename is from the tmp/ folder, with no "hash" on the CHROM line. Can we instead use the file with the hash in the parent folder?
     all_chr_strands = pandas.read_csv(allele_filename, sep='\t', header=0, comment='#')
     all_chr_strands.drop_duplicates(inplace=True)
 
-    sourcepop1_ids, sourcepop2_ids = map(lambda ids: list(filter(lambda ID: ID in all_chr_strands.columns, ids)), [sourcepop1_ids, sourcepop2_ids])
+    pop1_ids, pop2_ids = map(lambda ids: list(filter(lambda ID: ID in all_chr_strands.columns, ids)), [pop1_ids, pop2_ids])
 
     # The logic below looks through the IDs in the population sample ids file, and finds the ones for which we have a
     # column in the allele file. This is because we may NOT have phase3 data for ALL the IDs for that population, but they
@@ -223,43 +218,43 @@ if __name__ == '__main__':
     # 
     # The compicated lambda command is doing what the two (for ... for) loops are doing
     # resultant_pop1_ids = []
-    # for id in sourcepop1_ids:
+    # for id in pop1_ids:
     #     for chr_id in all_chr_strands.columns:
     #         if id == chr_id:
     #             resultant_pop1_ids.append(id)
-    # sourcepop1_ids = resultant_pop1_ids
+    # pop1_ids = resultant_pop1_ids
     #
     #
     # resultant_pop2_ids = []
-    # for id in sourcepop2_ids:
+    # for id in pop2_ids:
     #     for chr_id in all_chr_strands.columns:
     #         if id == chr_id:
     #             resultant_pop2_ids.append(id)
-    # sourcepop2_ids = resultant_pop2_ids
+    # pop2_ids = resultant_pop2_ids
     
-    # So, at this point we have sourcepop1_ids and sourcepop2_ids that have corresponding columns in the allele & homologous .vcf files
+    # So, at this point we have pop1_ids and pop2_ids that have corresponding columns in the allele & homologous .vcf files
 
     # The line below gets a list of lists, i.e. list of admixed chromosome list in the variable chromosomes
     # ancestry_proportions is a list of tuples with the proportion for each population
     # ID_pairs is a random list of indivual pairs for each of the two "distinct" proportions used to the get the other two variables in the function
-    chromosomes, ancestry_proportions, ID_pairs = create_test_chromosome_set(all_chr_strands, {'pop1' : sourcepop1_ids, 'pop2' : sourcepop2_ids}, num_admixed_chromosomes)
+    chromosomes, ancestry_proportions, ID_pairs = create_test_chromosome_set(all_chr_strands, {'pop1' : pop1_ids, 'pop2' : pop2_ids}, num_admixed_chromosomes)
     ### ancestry proportions is a list of [pop1_proportion, pop2_proportion] for each test chromosome
     print('created admixed chromosomes; creating anchor chromosomes')
 
     # The line below gets a list of pure chromosomes for the individuals from the two populations as two rows with
     # 1st arg of each row being a list of lists of pure chromosomes for a random list of pop ids, 
     # and 2nd arg being the list of population IDs randomly chosen in the function
-    pure = create_pure_chromosomes_from_all_pops(all_chr_strands, num_anchor, sourcepop1_ids, sourcepop2_ids)
+    pure = create_pure_chromosomes_from_all_pops(all_chr_strands, num_anchor_chromosomes, pop1_ids, pop2_ids)
     # source1pure is chromosomes and pop ids from first population
     # source2pure is chromosomes and pop ids from second population
     source1pure, source2pure = pure
 
     # In the lines below, the ancestry prportions list obtained above for the admixed chromosomes, is extended to contain
-    # num_anchor/2.0 entries with a tuple [1,0] implying this is a "population 1 pure proprotion" and the next line
-    #extending to contain num_anchor/2.0 entries with a tuple [0,1] implying this a "population 2 pure proportion".
-    num_anchor_per_ancestry = int(num_anchor/2.0)
-    ancestry_proportions.extend([[1,0]] * num_anchor_per_ancestry)
-    ancestry_proportions.extend([[0,1]] * num_anchor_per_ancestry)
+    # num_anchor_chromosomes/2.0 entries with a tuple [1,0] implying this is a "population 1 pure proprotion" and the next line
+    #extending to contain num_anchor_chromosomes/2.0 entries with a tuple [0,1] implying this a "population 2 pure proportion".
+    num_anchor_chromosomes_per_ancestry = int(num_anchor_chromosomes/2.0)
+    ancestry_proportions.extend([[1,0]] * num_anchor_chromosomes_per_ancestry)
+    ancestry_proportions.extend([[0,1]] * num_anchor_chromosomes_per_ancestry)
 
     print('created anchor chromosomes; dropping unneeded columns')
 
@@ -296,7 +291,7 @@ if __name__ == '__main__':
         # The line below simply adds the admixed chromosome list as a new column
         to_write_allele[name] = chrom
 
-    if (num_anchor > 0):
+    if (num_anchor_chromosomes > 0):
         print('adding pure chromosomes to dataframe')
     else:
         print('not adding any pure chromosomes to dataframe')
@@ -311,7 +306,6 @@ if __name__ == '__main__':
             to_write[ID] = np.fromiter(('{0}|{0}'.format(snp) for snp in chrom), dtype='<U3')
             to_write_allele[ID] = chrom
 
-    #print('finished building dataframe. Writing to .vcf file: {}'.format(out_filename))
     print('finished building dataframe. Writing to .vcf file: {}'.format(out_filename_homologous))
 
     #with open(out_filename, 'w') as f:
