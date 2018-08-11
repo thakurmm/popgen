@@ -7,4 +7,4 @@ test_input
 run_pipeline.err*
 run_pipeline.log*
 *~
-bin/pythonScripts/__pycache__*
+bin/pythonScripts/__pycache__/*
