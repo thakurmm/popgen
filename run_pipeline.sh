@@ -23,7 +23,7 @@ num_recombinations=0
 
 ## Main starts here
 echo "$(date): Starting pipeline" | tee -a $logf >> $errf
-bin/bashScripts/new/get_vcf_data.sh $start_chr $stop_chr>> $logf 2>> $errf
+bin/bashScripts/get_vcf_data.sh $start_chr $stop_chr>> $logf 2>> $errf
 echo "$(date): get_vcf_data.sh done" | tee -a $logf >> $errf
 
 
@@ -58,8 +58,8 @@ echo "$(date): select_populations.py done" | tee -a $logf >> $errf
 #python bin/pythonScripts/write_sample_IDs.py ${SAMPLE_IDS} ${pure_pop1} ${pure_pop2} >> $logf 2>> $errf
 #bin/pythonScripts/select_populations.py ${start_chr} ${stop_chr} ${pure_pop1} ${pure_pop2}  >> $logf 2>> $errf
 
-# bin/bashScripts/new/clean_chr_data_for_local_ancestry_split_new.sh ${start_chr} ${stop_chr} ${mix_pop} ${pure_pop1} ${pure_pop2} >> $logf 2>> $errf
-bin/bashScripts/new/clean_chr_data_for_local_ancestry_split_new.sh ${start_chr} ${stop_chr} ${pure_pop1} ${pure_pop2} >> $logf 2>> $errf
+# bin/bashScripts/clean_chr_data_for_local_ancestry_split_new.sh ${start_chr} ${stop_chr} ${mix_pop} ${pure_pop1} ${pure_pop2} >> $logf 2>> $errf
+bin/bashScripts/clean_chr_data_for_local_ancestry_split_new.sh ${start_chr} ${stop_chr} ${pure_pop1} ${pure_pop2} >> $logf 2>> $errf
 echo "$(date): clean_chr_data_for_local_ancestry_split_new.sh done" | tee -a $logf >> $errf
 
 
