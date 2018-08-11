@@ -164,8 +164,9 @@ def get_pop_IDs(filename):
 
 
 if __name__ == '__main__':
-    #np.random.seed(seed)
-    seed = 0
+    np.random.seed()
+    # Uncommenting the below will standardize the output with the same sequence of random numbers
+    # np.random.seed(0)
 
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--chr', help='chromosome to start on.', type=int, default=22)

@@ -18,6 +18,7 @@ import pandas as pd
 import itertools
 import pdb
 import argparse
+import os
 
 #### Function to create test chromosomes ####
 #### Create "admixed" populations from two pure populations
@@ -44,7 +45,7 @@ def create_test_chromosomes(chr_strands, pops, ref_IDs, num_recombinations):
     return [test_chr, true_chr]
 
 
-def create_test_chromosome_set(chr_strands, pops_dict, num_chromosomes, num_recombinations=8):
+def create_test_chromosome_set(chr_strands, pops_dict, num_chromosomes, num_recombinations):
     ### pops_dictionary should map population name to list of haploid IDs corresponding to that population
     ### if num_chromosomes == -1, as many chromosomes as possible will be created
 
@@ -74,7 +75,9 @@ def get_pop_IDs(filename):
 
 
 if __name__ == '__main__':
-    np.random.seed(0)
+    np.random.seed()
+    # Uncommenting the below will standardize the output
+    # np.random.seed(0)
 
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--num_admixed', help='number of admixed chromosomes.', type=int, default=10)
@@ -114,7 +117,7 @@ if __name__ == '__main__':
     # pop ids from pop1 and pop2 in the two lists (as sourcepop1_ids and sourcepop2_ids)
     sourcepop1_ids, sourcepop2_ids = map(lambda ids: list(filter(lambda ID: ID in all_chr_strands.columns, ids)),[sourcepop1_ids, sourcepop2_ids])
     
-    test_chr = create_test_chromosome_set(all_chr_strands, {'pop1' : sourcepop1_ids, 'pop2' : sourcepop2_ids}, num_admixed_chromosomes)
+    test_chr = create_test_chromosome_set(all_chr_strands, {'pop1' : sourcepop1_ids, 'pop2' : sourcepop2_ids}, num_admixed_chromosomes, num_recombinations)
 
     ancestry_df = pd.DataFrame(all_chr_strands[all_chr_strands.columns[:9]])
     # homologous_df = pd.DataFrame(all_chr_strands[all_chr_strands.columns[:9]])
@@ -129,6 +132,8 @@ if __name__ == '__main__':
     # @Todo should we create a homolgoous vcf file as well for consistency? We only make an allele file here.
 
     # chrom_df.to_csv('test_input/CEU_YRI_test_SNPs_ALLELE_vcf.txt', sep='\t', index=False)
+    if not os.path.exists('test_input'):
+        os.makedirs('test_input')
     ancestry_df.to_csv('test_input/{}_{}_{}true_population.csv'.format(sourcepop1, sourcepop2, num_admixed_chromosomes), sep='\t', index=False)
     chrom_df.to_csv('test_input/{}_{}_{}test_SNPs_ALLELE_vcf.txt'.format(sourcepop1, sourcepop2, num_admixed_chromosomes), sep='\t', index=False)
     # homologous_df.to_csv('test_input/CEU_YRI_test_SNPs_homologous.vcf', sep='\t', index=False)

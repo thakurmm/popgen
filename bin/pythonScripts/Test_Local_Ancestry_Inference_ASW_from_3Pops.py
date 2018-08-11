@@ -278,7 +278,8 @@ if __name__ == '__main__':
 	train_basename = os.path.basename(train_filename)
 	test_basename = os.path.basename(test_filename)
 
-	# out_filename = '/home/greg/School/popgen/results/source={}_test={}'.format(train_basename, test_basename)
+	if not os.path.exists('results'):
+		os.makedirs('results')
 	out_filename = 'results/source={}_test={}'.format(train_basename, test_basename)
 
 	test_chromosomes_sliding_windows(

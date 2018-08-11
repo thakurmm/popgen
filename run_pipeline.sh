@@ -8,16 +8,17 @@ pure_pop2="YRI"
 logf="run_pipeline.log"
 errf="run_pipeline.err"
 
+touch $errf $logf
 cat $errf >> $errf.full
 cat $logf >> $logf.full
 rm $errf $logf
-num_admixed_array=(10 200 200 250 250 300 300 350 350 400 400)
-num_pure_array=(300 30  20  30  20  30  20  30  20  30  20)
+# num_admixed_array=(10 200 200 250 250 300 300 350 350 400 400)
+# num_pure_array=(300 30  20  30  20  30  20  30  20  30  20)
 
-# num_admixed_array=(5)
-# num_pure_array=(200)
+num_admixed_array=(5)
+num_pure_array=(200)
 num_array_elems=${#num_admixed_array[@]}
-num_recombinations=8
+num_recombinations=0
 
 
 ## Main starts here
