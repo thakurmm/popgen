@@ -133,9 +133,8 @@ The final output from the pipeline will be present in the results directory.
 
 ALL scripts below must be run from the top level `popgen` folder
 
-1. Usage: 
 ~~~
-bin/bashScripts/get_vcf_data.sh
+1. bin/bashScripts/get_vcf_data.sh
 ~~~
 
 Download the vcf files for the chromosomes of interest
@@ -144,8 +143,9 @@ Download the vcf files for the chromosomes of interest
    and copies the files in the folder data/vcf. The script will also create a "shortened symbolic link" (e.g. chr22.vcf.gz), which is used in
    the select_populations.py script below.
 
-
-2. Usage: `python bin/pythonScripts/write_sample_IDs.py {sample_ids_file} {pure_pop1} {pure_pop2} `
+~~~
+2. python bin/pythonScripts/write_sample_IDs.py {sample_ids_file} {pure_pop1} {pure_pop2}
+~~~
 
 This script will use the unfiltered Sample IDs (from the SampleIDs folder) and extract the population IDs only for the population types specified as input arguments to the script.
 
@@ -154,9 +154,8 @@ This script will use the unfiltered Sample IDs (from the SampleIDs folder) and e
    - `pure_pop1 AND pure_pop2`: These two variables define the 3 character designation for the two 'pure populations' of interest
 
 
-3. Usage:
 ~~~
-bin/pythonScripts/select_populations.py ${start_chr} ${stop_chr} ${pure_pop1} ${pure_pop2}
+3. bin/pythonScripts/select_populations.py ${start_chr} ${stop_chr} ${pure_pop1} ${pure_pop2}
 ~~~
 
 Recodes the VCF file for each chromosome to a new VCF file of the pure populations.
@@ -176,9 +175,8 @@ Recodes the VCF file for each chromosome to a new VCF file of the pure populatio
    Calls: `vcftools`
 
 
-4. Usage: 
 ~~~
-bin/bashScripts/clean_chr_data_for_local_ancestry_split_new.sh ${start_chr} ${stop_chr} ${pure_pop1} ${pure_pop2}
+4. bin/bashScripts/clean_chr_data_for_local_ancestry_split_new.sh ${start_chr} ${stop_chr} ${pure_pop1} ${pure_pop2}
 ~~~
 
 Generate the homologous and allele files for the populations of interest from the outputs of the previous script. Also, run admixture to create the .Q files from the allele file (to be used later by STRUCTUREPAINTER, see Admixture documentation for details).
@@ -202,9 +200,8 @@ Generate the homologous and allele files for the populations of interest from th
    _@ToDo: The pops_data/*_Data/Chr*/tmp/ needs to be cleaned up. What files can be deleted or renamed? The tmp folder files are being used below at this time._
 
 
-5. Usage: 
 ~~~
-bin/pythonScripts/create_admixed_chromosomes.py --chr ${start_chr}  --pops ${pure_pop1} ${pure_pop2} --num_admixed ${num_admixed} --num_anchor ${num_pure}--num_recombinations ${num_recombinations}
+5. bin/pythonScripts/create_admixed_chromosomes.py --chr ${start_chr}  --pops ${pure_pop1} ${pure_pop2} --num_admixed ${num_admixed} --num_anchor ${num_pure}--num_recombinations ${num_recombinations}
 ~~~
 Parses the output of the previous script (`clean_chr_data_for_local_ancestry_split_new.sh`, which calls `split_homologous_chr.py`) and creates an admixed training set. This is where we use the list of sampleIds per population created by write_sample_IDs.py.
 
@@ -233,9 +230,8 @@ Parses the output of the previous script (`clean_chr_data_for_local_ancestry_spl
          - **not** used by STRUCTUREpainter (we only have this information here because of our artificially created training set). 
          - This is included as verification. The advantage of STRUCTUREpainter is that pure populations are NOT needed.
 
-6. Usage: 
 ~~~
-bin/bashScripts/run_plink_and_admixture.sh ${pure_pop1} ${pure_pop2} ${num_admixed} ${num_pure}
+6. bin/bashScripts/run_plink_and_admixture.sh ${pure_pop1} ${pure_pop2} ${num_admixed} ${num_pure}
 ~~~
 
 Runs admixture on the admixed training set.
@@ -254,9 +250,8 @@ OPTIONAL: Use `plot_admix_results.py` script to see how well ADMIXTURE does in i
      - e.g. CEU_YRI_admixed_5admixed_200pure.2.P and CEU_YRI_admixed_5admixed_200pure.2.Q
 
 
-7. Usage:
 ~~~
-bin/pythonScripts/generate_test_set.py --chr ${start_chr}  --pops ${pure_pop1} ${pure_pop2} --num_admixed ${num_admixed} --num_recombinations ${num_recombinations}
+7. bin/pythonScripts/generate_test_set.py --chr ${start_chr}  --pops ${pure_pop1} ${pure_pop2} --num_admixed ${num_admixed} --num_recombinations ${num_recombinations}
 ~~~
 
 This script is similar to create_admixed_chromosomes.py. However, this script generates the virtual admixed populations as two tsv (tab separated values) files (see Output data below).
@@ -279,9 +274,8 @@ This script is similar to create_admixed_chromosomes.py. However, this script ge
        - csv containing ancestry information e.g. CEU_YRI_5true_population.csv
        - csv containing genetic information e.g. CEU_YRI_5test_SNPs_ALLELE_vcf.txt
 
-8. Usage:
 ~~~
-bin/pythonScripts/Test_Local_Ancestry_Inference_ASW_from_3Pops.py \
+8. bin/pythonScripts/Test_Local_Ancestry_Inference_ASW_from_3Pops.py \
         --reference_filename ${admixed_allele_vcf} --all_admix_filename ${all_admixture_Q} --chrom_admix_filename ${chrom_admixture_Q} --test_filename {genetic_info_tsv_file} \
         --num_test ${num_test_ids} \
         --kmer ${window_size} --num_windows ${num_sliding_windows} --seed {random_seed}`
@@ -316,18 +310,19 @@ This is the STRUCTUREPainter script, which processes the data generated previous
    
    _@ToDo The logic for passing a combined 22 chromsome VCF file to ADMIXTURE needs to happen__
     
-9. Usage: 
 ~~~
-evaluate_inferences.py --inferences_filename ${STRUCTUREPainter_output) --true_ancestry_filename (ancestry_information_csv) --save_plot_filename (output_png_file)
+9. evaluate_inferences.py --inferences_filename ${STRUCTUREPainter_output) --true_ancestry_filename (ancestry_information_csv) --save_plot_filename (output_png_file)
 ~~~
 Will plot the results of STRUCTUREpainter against the true ancestry values for the test set of chromosomes.
 
    Script arguments:
-       Required Arguments:
-         - `inferences_filename` (STRUCTUREPainter_output) - Output of StructurePainter from the results/ folder.
-         - `true_ancestry_filename` (ancestry_information_csv) - csv containing true ancestry information from the test_input folder e.g. CEU_YRI_5true_population.csv.
-       Optional Arguments:
-         - `save_plot_filename` (output_png_file) - name to use for plot that will be generated (if not specified, plot will be shown instead of saved).
+   
+   Required Arguments:    
+   - `inferences_filename` (STRUCTUREPainter_output) - Output of StructurePainter from the results/ folder.
+   - `true_ancestry_filename` (ancestry_information_csv) - csv containing true ancestry information from the test_input folder e.g. CEU_YRI_5true_population.csv.
+   
+   Optional Arguments:
+   - `save_plot_filename` (output_png_file) - name to use for plot that will be generated (if not specified, plot will be shown instead of saved).
 
 
         ----Stopped here when editing Readme--------
