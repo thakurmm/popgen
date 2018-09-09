@@ -1,12 +1,12 @@
 '''
 This file is similar to create_admixed_chromsomes.py, which has additional comments
 
-Pases the output of s='split_homologous_chr.py', and creates a number of admixed genomes from the two given populations
+Passes the output of s='split_homologous_chr.py', and creates a number of admixed genomes from the two given populations
 
 This script generates two output tsv files in popgen/test_input/
     First output (true_population.csv) has true ancestry information (pop1, pop2). Refers to which true
      population the SNP was picked from to create the virtual admixed individual
-    Second output (test_SNPs_ALLELE_vcf.txt) is a subset of the vcf file with only 10 admixed individuals.
+    Second output (test_SNPs_ALLELE_vcf.txt) is a subset of the vcf file with the specified number of admixed individuals.
      Thus, it has 0 or 1 for each SNP (reference or alt) for each admixed individual. Each admixed invidividual was
      created from 2 homologous "parents" (really one of the two split chromsomes of each original parent individual)
      Whether the SNP was from a pop1 or pop2 individual is found in the first output file
@@ -101,10 +101,7 @@ if __name__ == '__main__':
     
     #@ToDo We need to incorporate chr_number somewhere in our output folder path.
     # File below is from the tmp folder because the Chrom line (header line) does not and SHOULD not have a "HASH"
-    allele_filename = 'pops_data/{}_Data/Chr{}/tmp/chr22.phase3.{}.SNPs.allele.vcf'.format(populations, chr_number, populations)
-    # test1_ids_filename = '/home/greg/School/popgen/SampleIDs/CEU_Sample_IDs_haploid.txt'
-    # test2_ids_filename = '/home/greg/School/popgen/SampleIDs/YRI_Sample_IDs_haploid.txt'
-    # test_source_filename = '/home/greg/School/popgen/data/chr22.phase3.ASW_CEU_YRI.SNPs.homologous.txt'
+    allele_filename = 'pops_data/{}_Data/Chr{}/tmp/chr{}.phase3.{}.SNPs.allele.vcf'.format(populations, chr_number, chr_number, populations)
 
     sourcepop1_ids = get_pop_IDs(sourcepop1_ids_filename)
     sourcepop2_ids = get_pop_IDs(sourcepop2_ids_filename)

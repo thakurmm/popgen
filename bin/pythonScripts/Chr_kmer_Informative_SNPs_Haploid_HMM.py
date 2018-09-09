@@ -63,6 +63,8 @@ def select_informative_SNPs(chr_strands: pd.DataFrame, prob_pops: pd.Series, ADM
 
 
 def all_kmer_haplotypes(k):
+	# Uncomment the below line to include "N" as a SNP possibility in the haplotypes
+	# return list(map(lambda x: ''.join(x), itertools.product('01N', repeat=k)))
 	return list(map(lambda x: ''.join(x), itertools.product('01', repeat=k)))
 
 
@@ -209,7 +211,7 @@ def HMM_prob_one_direction(chr_strand_substrings_array, init_prob, log2_emission
 	return {'ancestry' : chr_states, 'probs' : chr_states_prob}
 
 
-def both_directions_local_ancestry_prob(chr_strand_substrings, ADMIX, individual_IDs, log2_emission_matrices, kmer, recomb_rate=0.0001):
+def both_directions_local_ancestry_prob(chr_strand_substrings, ADMIX, individual_IDs, log2_emission_matrices, kmer, recombination_rate):
 	'''
 	individual_IDs is a Python list of IDs of individuals to perform LAI for
 	'''
@@ -247,7 +249,7 @@ def both_directions_local_ancestry_prob(chr_strand_substrings, ADMIX, individual
 			col_ix = [False] * npops
 			col_ix[pop_index] = True
 
-			transition_matrix[np.ix_(row_ix, col_ix)] = recomb_rate * init_prob[pop_index]
+			transition_matrix[np.ix_(row_ix, col_ix)] = recombination_rate * init_prob[pop_index]
 
 		np.fill_diagonal(transition_matrix, 1 - np.sum(transition_matrix, axis=1))
 		log2_transition_matrix = np.log2(transition_matrix)

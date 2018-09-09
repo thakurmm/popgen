@@ -189,7 +189,7 @@ if __name__ == '__main__':
     # homologous_filename = '/home/greg/School/popgen/data/chr22.phase3.{}.SNPs.homologous.txt'.format('ASW_CEU_YRI') ### TODO: change this
 
     #@ToDo the chr22.phase3 .... file should be renamed to just chr.phase3.... , because this is in the Chr21, Chr22 folder and so on
-    allele_filename = 'pops_data/{}_Data/Chr{}/tmp/chr22.phase3.{}.SNPs.allele.vcf'.format(populations, chr_number, populations)
+    allele_filename = 'pops_data/{}_Data/Chr{}/tmp/chr{}.phase3.{}.SNPs.allele.vcf'.format(populations, chr_number, chr_number, populations)
 
     pop1_ids_filename = 'SampleIDs/{}_Sample_IDs_haploid.txt'.format(pop1)
     pop2_ids_filename = 'SampleIDs/{}_Sample_IDs_haploid.txt'.format(pop2)

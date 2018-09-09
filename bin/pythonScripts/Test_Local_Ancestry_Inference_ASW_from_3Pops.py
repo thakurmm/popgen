@@ -65,7 +65,7 @@ pd.set_option('display.float_format', lambda x: '%.4f' % x)
 	out_filename = output in result folder
 '''
 def test_chromosomes_sliding_windows(kmer, seed, num_windows, num_test, train_filename, test_filename,
-	all_admixture_filename, admixture_filename, out_filename):
+	all_admixture_filename, admixture_filename, out_filename, recombination_rate):
 
 	np.random.seed(seed)
 	print('performing inference with window size: {}'.format(kmer))
@@ -152,6 +152,7 @@ def test_chromosomes_sliding_windows(kmer, seed, num_windows, num_test, train_fi
 	# NA121815-1-NA18864-2-0    0.5894      0.4106
 	# NA121913-1-NA19852-2-0    0.1822      0.8178
 
+	# Choose by index
 	train_chr_strands_top = HMM.select_informative_SNPs(train_chr_strands, prob_pops, ADMIX, diff_quantile=0.1)
 	train_chr_strands_with_test_top = train_chr_strands_with_test.ix[train_chr_strands_top.index, :]
 
@@ -173,13 +174,15 @@ def test_chromosomes_sliding_windows(kmer, seed, num_windows, num_test, train_fi
 		ADMIX_with_test = ADMIX.copy()
 		for identifier in identifiers_to_use:
 			ADMIX_with_test.loc[identifier] = (ADMIX.sum() / len(ADMIX))
+			# Can we replace with this?
+			# ADMIX_with_test.loc[identifier] = prob_pops
 
 		log2_emission_matrices = HMM.create_emission_matrix(chr_strand_with_test_substrings, ADMIX_with_test, prob_pops, all_haplotypes)
 		# log2_emission_matrices = HMM.create_emission_matrix(chr_strand_substrings, ADMIX, prob_pops, all_haplotypes)
 		### getting empty entries in emission matrices when leaving out test chrs
 
 		### local ancestry inference ###
-		inferences = HMM.both_directions_local_ancestry_prob(chr_strand_with_test_substrings, ADMIX, identifiers_to_use, log2_emission_matrices, kmer, recomb_rate=0.001)
+		inferences = HMM.both_directions_local_ancestry_prob(chr_strand_with_test_substrings, ADMIX, identifiers_to_use, log2_emission_matrices, kmer, recombination_rate)
 
 		### combine forward ancestry with backward ancestry, with a value of 'unknown' for positions that differ between the forward and backward inferences
 		all_windows[window] = inferences['both_ancestry']
@@ -262,7 +265,8 @@ if __name__ == '__main__':
 	parser.add_argument('--all_admix_filename', help='path to overall admix filename', type=str, required=True)
 	parser.add_argument('--chrom_admix_filename', help='path to admix filename for this chromosome', type=str, required=True)
 	parser.add_argument('--test_filename', help='path to file that contains chromosomes for which ancestry should be inferred', type=str, required=True)
-
+	parser.add_argument('--recombination_rate', help='rate of recombination for STRUCTUREpainter', type=float, required=True)
+	
 	args = parser.parse_args()
 
 	kmer = args.kmer
@@ -275,8 +279,12 @@ if __name__ == '__main__':
 	all_admixture_filename = args.all_admix_filename
 	admixture_filename = args.chrom_admix_filename
 
+	recombination_rate = args.recombination_rate
+
+
 	train_basename = os.path.basename(train_filename)
 	test_basename = os.path.basename(test_filename)
+
 
 	if not os.path.exists('results'):
 		os.makedirs('results')
@@ -291,4 +299,5 @@ if __name__ == '__main__':
 		test_filename,
 		all_admixture_filename,
 		admixture_filename,
-		out_filename)
+		out_filename,
+		recombination_rate)

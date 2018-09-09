@@ -2,7 +2,7 @@
 
 start_chr=22
 stop_chr=22
-mix_pop="ASW"
+# mix_pop="ASW"
 pure_pop1="CEU"
 pure_pop2="YRI"
 logf="run_pipeline.log"
@@ -15,10 +15,12 @@ rm $errf $logf
 # num_admixed_array=(10 200 200 250 250 300 300 350 350 400 400)
 # num_pure_array=(300 30  20  30  20  30  20  30  20  30  20)
 
+sample_ids_file="SampleIDs/igsr_samples.tsv"
 num_admixed_array=(5)
 num_pure_array=(200)
 num_array_elems=${#num_admixed_array[@]}
 num_recombinations=0
+recombination_rate=0.00000001
 
 
 ## Main starts here
@@ -29,33 +31,29 @@ echo "$(date): get_vcf_data.sh done" | tee -a $logf >> $errf
 
 # -----------------------
 
-if [ -f SampleIDs/igsr_samples.tsv ]; then
-	SAMPLE_IDS="SampleIDs/igsr_samples.tsv"
-elif [ -f SampleIDs/pops_for_sample_IDs.tsv ]; then
-	SAMPLE_IDS="SampleIDs/pops_for_sample_IDs.tsv"
-else
-	echo "Missing SampleIDs/igsr_samples.tsv OR SampleIDs/pops_for_sample_IDs.tsv"
+if [ ! -f $sample_ids_file ]; then
+	echo "Missing ${sample_ids_file}"
 	echo "Need to download the SampleIDs for all populations"
 	exit 1
 fi
 
-python bin/pythonScripts/write_sample_IDs.py ${SAMPLE_IDS} ${mix_pop} ${pure_pop1} ${pure_pop2} >> $logf 2>> $errf
-echo "$(date): write_sample_IDs.py done" | tee -a $logf >> $errf
+# python bin/pythonScripts/write_sample_IDs.py ${sample_ids_file} ${mix_pop} ${pure_pop1} ${pure_pop2} >> $logf 2>> $errf
+# echo "$(date): write_sample_IDs.py done" | tee -a $logf >> $errf
 
-python bin/pythonScripts/write_sample_IDs.py ${SAMPLE_IDS} ${pure_pop1} ${pure_pop2} >> $logf 2>> $errf
+python bin/pythonScripts/write_sample_IDs.py ${sample_ids_file} ${pure_pop1} ${pure_pop2} >> $logf 2>> $errf
 echo "$(date): write_sample_IDs.py done" | tee -a $logf >> $errf
 
 # ----------------------
 
-bin/pythonScripts/select_populations.py ${start_chr} ${stop_chr} ${mix_pop} ${pure_pop1} ${pure_pop2}  >> $logf 2>> $errf
-echo "$(date): select_populations.py done" | tee -a $logf >> $errf
+# bin/pythonScripts/select_populations.py ${start_chr} ${stop_chr} ${mix_pop} ${pure_pop1} ${pure_pop2}  >> $logf 2>> $errf
+# echo "$(date): select_populations.py done" | tee -a $logf >> $errf
 
 bin/pythonScripts/select_populations.py ${start_chr} ${stop_chr} ${pure_pop1} ${pure_pop2}  >> $logf 2>> $errf
 echo "$(date): select_populations.py done" | tee -a $logf >> $errf
 
 
 #@ToDo move below for STRUCTUREpainter part
-#python bin/pythonScripts/write_sample_IDs.py ${SAMPLE_IDS} ${pure_pop1} ${pure_pop2} >> $logf 2>> $errf
+#python bin/pythonScripts/write_sample_IDs.py ${sample_ids_file} ${pure_pop1} ${pure_pop2} >> $logf 2>> $errf
 #bin/pythonScripts/select_populations.py ${start_chr} ${stop_chr} ${pure_pop1} ${pure_pop2}  >> $logf 2>> $errf
 
 # bin/bashScripts/clean_chr_data_for_local_ancestry_split_new.sh ${start_chr} ${stop_chr} ${mix_pop} ${pure_pop1} ${pure_pop2} >> $logf 2>> $errf
@@ -78,6 +76,7 @@ do
 		--pops ${pure_pop1} ${pure_pop2} \
 		--num_recombinations ${num_recombinations} >> $logf 2>> $errf
 	
+	# These lines will be run by run_plink_and_admixture.sh if running scripts individually
     admixed_output_homologous_file="pops_data/admixed/${pure_pop1}_${pure_pop2}_admixed_${num_admixed}admixed_${num_pure}pure_HOMOLOGOUS.vcf"
     admixed_output_allele_file="pops_data/admixed/${pure_pop1}_${pure_pop2}_admixed_${num_admixed}admixed_${num_pure}pure_ALLELE_vcf.txt"
     admixed_proportions_file="pops_data/admixed/${pure_pop1}_${pure_pop2}_admixed_${num_admixed}admixed_${num_pure}pure_proportions.txt"
@@ -93,7 +92,7 @@ do
 	mv ${pure_pop1}_${pure_pop2}_admixed_${num_admixed}admixed_${num_pure}pure.2.* pops_data/admixture	
 
 	#./create_all_admixed_chromosomes.sh >> $logf 2>> $errf
-	echo "$(date): create_all_admixed_chromosomes.py done" | tee -a $logf >> $errf
+	echo "$(date): create_admixed_chromosomes.py done" | tee -a $logf >> $errf
 	# ------------------------------
 
 	python bin/pythonScripts/generate_test_set.py \
@@ -114,7 +113,8 @@ do
 		--all_admix_filename pops_data/admixture/${prefix}.2.Q \
 		--chrom_admix_filename pops_data/admixture/${prefix}.2.Q \
 		--num_test $num_test_ids \
-		--test_filename test_input/${pure_pop1}_${pure_pop2}_${num_admixed}test_SNPs_ALLELE_vcf.txt >> $logf 2>> $errf
+		--test_filename test_input/${pure_pop1}_${pure_pop2}_${num_admixed}test_SNPs_ALLELE_vcf.txt >> $logf 2>> $errf \
+		--recombination_rate $recombination_rate
 	
 	#./test_ancestry.sh >> $logf 2>> $errf
 	echo "$(date): test_ancestry.sh done" | tee -a $logf >> $errf

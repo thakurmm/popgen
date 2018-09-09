@@ -2,8 +2,9 @@
 # This script is expected to be run from the popgen folder.
 # This script will download very large amounts of data and will take a LONG time to run.
 
-URL="http://hgdownload.cse.ucsc.edu/gbdb/hg19/1000Genomes/phase3"
 URL="ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/"
+## Uncomment the line below if the above download link fails
+# URL="http://hgdownload.cse.ucsc.edu/gbdb/hg19/1000Genomes/phase3"
 mkdir -p data/vcf
 cd data/vcf
 

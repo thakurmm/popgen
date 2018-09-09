@@ -133,23 +133,27 @@ The final output from the pipeline will be present in the results directory.
 
 ALL scripts below must be run from the top level `popgen` folder
 
-1. Download the vcf files for the chromosomes of interest using the script
-    `bin/bashScripts/get_vcf_data.sh`
+1. Usage: `bin/bashScripts/get_vcf_data.sh`
+
+Download the vcf files for the chromosomes of interest
     
    This file will download the vcf files for the chromosomes (edit the file if not ALL chromosomes should be downloaded)
    and copies the files in the folder data/vcf. The script will also create a "shortened symbolic link" (e.g. chr22.vcf.gz), which is used in
    the select_populations.py script below.
 
-2. This script will use the unfiltered Sample IDs (from the SampleIDs folder) and extract the population IDs only for the population types specified as input arguments to the script.
 
-    Usage: `python bin/pythonScripts/write_sample_IDs.py {sample_ids_file} {pure_pop1} {pure_pop2} `
+2. Usage: `python bin/pythonScripts/write_sample_IDs.py {sample_ids_file} {pure_pop1} {pure_pop2} `
+
+This script will use the unfiltered Sample IDs (from the SampleIDs folder) and extract the population IDs only for the population types specified as input arguments to the script.
+
     - `sample_ids_file`: This variable is the file location for the samples ids file downloaded from 1000 genomes.
                        (Previously downloaded version in Git - SampleIDs/igsr_samples.tsv)
     - `pure_pop1 AND pure_pop2`: These two variables define the 3 character designation for the two 'pure populations' of interest
 
-3. Recode the VCF file for each chromosome to a new VCF file of the pure populations
 
-    Usage: `bin/pythonScripts/select_populations.py ${start_chr} ${stop_chr} ${pure_pop1} ${pure_pop2}`
+3. Usage: `bin/pythonScripts/select_populations.py ${start_chr} ${stop_chr} ${pure_pop1} ${pure_pop2}`
+
+Recodes the VCF file for each chromosome to a new VCF file of the pure populations.
     
     The script expects the following input files to be present.
     - `data/vcf/chr22.vcf.gz` - This is the vcf data file (one for each chromosome number). This file is created with the
@@ -165,10 +169,12 @@ ALL scripts below must be run from the top level `popgen` folder
 
     Calls: vcftools
 
-4. Generate the homologous and allele files for the populations of interest from the outputs of the previous script. Also, run admixture
-   to create the .Q files from the allele file (to be used later by STRUCTUREPAINTER, see Admixture documentation for details).
+
+4. Usage: `bin/bashScripts/clean_chr_data_for_local_ancestry_split_new.sh ${start_chr} ${stop_chr} ${pure_pop1} ${pure_pop2}`
+
+
+Generate the homologous and allele files for the populations of interest from the outputs of the previous script. Also, run admixture to create the .Q files from the allele file (to be used later by STRUCTUREPAINTER, see Admixture documentation for details).
    
-   Usage: `bin/bashScripts/clean_chr_data_for_local_ancestry_split_new.sh ${start_chr} ${stop_chr} ${pure_pop1} ${pure_pop2}`
 
     The script expects the following input files to be present.
     - `pops_data/*_Data/Chr22/*.recode.vcf` - The recoded VCF file from select_populations.py is located in this folder for a specific chromosome.
@@ -179,77 +185,128 @@ ALL scripts below must be run from the top level `popgen` folder
 
     Script runtime for Chr22: about 10 minutes.
 
-    Calls: vcftools plink admixture bin/pythonScripts/split_homologous_chr.py
+    Calls: 
+        bin/pythonScripts/split_homologous_chr.py
+        vcftools plink admixture 
    
     The output from the script can be found in the folder pops_data/*_Data/Chr22/
-    
 
-----Stopped here when editing Readme--------
+@ToDo: The pops_data/*_Data/Chr*/tmp/ needs to be cleaned up. What files can be deleted or renamed? The tmp folder files are being used below at this time.
 
-4. Run `create_all_admixed_chromosomes.sh`, which executes "create_admixed_chromosomes.py" to parse the output of `split_homologous_chr.py` (which is called as part of the previous step) and create an admixed training set.
-   The script will also run admixture after running the python script.
 
-    In this script, we will be breaking up the "combined" vcf file from the previous step, into multiple VCF files per population of interest.
-    This is where we use the list of sampleIds per population created in the 1st step above.
-	- Input data:
-		- In `SampleIDs/` directory: two lists of sample IDs, one for each training population.
-		- In `data/` directory: source of genetic data, e.g. `chr22.phase3.ASW_CEU_YRI.SNPs.homologous.txt`
-	- Output data:
-		- In `pops_data/admixed/` directory:
-			- admixed training set, in two forms:
-				- `CEU_YRI_admixed_40admixed_100pure_ALLELE_vcf.txt`
-				- `CEU_YRI_admixed_40admixed_100pure_HOMOLOGOUS.vcf`
-				- These have the same column names, but when the allele file has `0`, the homologous vcf has `0|0`, and when the allele file has `1`, the homologous vcf has `1|1`.
-			- True ancestry proportions for the admixed training set
-				- e.g. `CEU_YRI_admixed_40admixed_100pure_proportions.txt`
-				- **not** used by STRUCTUREpainter (we only have this information here because of our artificially created training set). Used in `plot_admix_results.py` script to see how well ADMIXTURE does in inferring ancestry proportions.
+5. Usage: `bin/pythonScripts/create_admixed_chromosomes.py --chr ${start_chr}  --pops ${pure_pop1} ${pure_pop2} --num_admixed ${num_admixed} --num_anchor ${num_pure}--num_recombinations ${num_recombinations}`
+
+Parses the output of the previous script (`clean_chr_data_for_local_ancestry_split_new.sh`, which calls `split_homologous_chr.py`) and creates an admixed training set. This is where we use the list of sampleIds per population created by write_sample_IDs.py.
+
+    The script expects the following input files to be present.
+    - Following folders must be present: pops_data/admixed  and   pops_data/admixture/bed (@ToDo: to create empty folders in git, make a .keep file in the folder.)
+    - In `SampleIDs/` directory: two lists of sample IDs, one for each training population, created by the write_sample_IDs.py script above. e.g. SampleIDs/CEU_YRI_IDs.txt
+    - In `pops_data/*_Data/Chr*/tmp/` directory: source of genetic data, e.g. `chr22.phase3.ASW_CEU_YRI.SNPs.allele.vcf`
+
+    Script arguments:
+    - `start_chr`: Start chromosome number to be used for processing in the pipeline.
+    - `pure_pop1 AND pure_pop2`: These two variables define the 3 character designation for the two 'pure populations' of interest
+    - `num_admixed`: This variable sets the number of admixed individuals to be generated for use by STRUCTUREPAINTER.
+    - `num_pure`: This variable sets the number of pure individuals to be generated for use by STRUCTUREPAINTER
+    - `num_recombinations`: This variable is the number of recombination ("crossing-over") events used to create the virtual admixed chromosomes
+
+    Script runtime for Chr22: about 1 minute
+
+    Output data:
+    - In `pops_data/admixed/` directory:
+        - admixed training set, in two forms:
+            - e.g. `CEU_YRI_admixed_40admixed_100pure_ALLELE_vcf.txt`
+            - e.g. `CEU_YRI_admixed_40admixed_100pure_HOMOLOGOUS.vcf`
+                - These have the same column names, but when the allele file has `0`, the homologous vcf has `0|0`, and when the allele file has `1`, the homologous vcf has `1|1`.
+        - True ancestry proportions for the admixed training set
+                - e.g. `CEU_YRI_admixed_40admixed_100pure_proportions.txt`
+                - **not** used by STRUCTUREpainter (we only have this information here because of our artificially created training set). 
                 - This is included as verification. The advantage of STRUCTUREpainter is that pure populations are NOT needed.
 
+6. Usage: `bin/bashScripts/run_plink_and_admixture.sh ${pure_pop1} ${pure_pop2} ${num_admixed} ${num_pure}`
 
-5. Run `generate_test_set.py`.
+Runs admixture on the admixed training set.
+OPTIONAL: Use `plot_admix_results.py` script to see how well ADMIXTURE does in inferring ancestry proportions.
+ 
+    Script arguments:
+    - `pure_pop1 AND pure_pop2`: These two variables define the 3 character designation for the two 'pure populations' of interest
+    - `num_admixed`: This variable sets the number of admixed individuals to be generated for use by STRUCTUREPAINTER.
+    - `num_pure`: This variable sets the number of pure individuals to be generated for use by STRUCTUREPAINTER
 
-	- Input data:
-		- In `SampleIDs/` directory: two lists of sample IDs, one for each of the populations that we want to admix together.
-		- In `data/` directory: genetic information (formatted like a VCF) of the individuals referenced by the sample IDs.
+    Script runtime for Chr22: about 1 minute
+
+    Output data:
+    - in `pops_data/admixture/` directory:
+        - e.g. CEU_YRI_admixed_5admixed_200pure.2.P and CEU_YRI_admixed_5admixed_200pure.2.Q
+
+
+7. Usage: `bin/pythonScripts/generate_test_set.py` --chr ${start_chr}  --pops ${pure_pop1} ${pure_pop2} --num_admixed ${num_admixed} --num_recombinations ${num_recombinations}
+
+This script is similar to create_admixed_chromosomes.py. However, this script generates the virtual admixed populations as two tsv (tab separated values) files (see Output data below).
+
+    The script expects the following input files to be present.
+    - In `SampleIDs/` directory: two lists of sample IDs, one for each training population, created by the write_sample_IDs.py script above. e.g. SampleIDs/CEU_YRI_IDs.txt
+    - In `pops_data/*_Data/Chr*/tmp/` directory: source of genetic data, e.g. `chr22.phase3.ASW_CEU_YRI.SNPs.allele.vcf`
+
+
+    Script arguments:
+    - `start_chr`: Start chromosome number to be used for processing in the pipeline.
+    - `pure_pop1 AND pure_pop2`: These two variables define the 3 character designation for the two 'pure populations' of interest
+    - `num_admixed`: This variable sets the number of admixed individuals to be generated for use by STRUCTUREPAINTER.
+    - `num_recombinations`: This variable is the number of recombination ("crossing-over") events used to create the virtual admixed chromosomes
+
+    Script runtime for Chr22: about 10 seconds
+
 	- Output data:
-		- In `test_input/` directory (test input to STRUCTUREpainter):
-			- csv containing ancestry information
-			- csv containing genetic information
+    	- In `test_input/` directory (test input to STRUCTUREpainter):
+    		- csv containing ancestry information e.g. CEU_YRI_5true_population.csv
+    		- csv containing genetic information e.g. CEU_YRI_5test_SNPs_ALLELE_vcf.txt
 
-6. After you've followed these steps, `test_ancestry.sh` will run STRUCTUREpainter with appropriate parameters.
-    - This calls Test_Local_Ancestry_Inference_ASW_from_3Pops.py
-    - Input Data is hard-coded currently (chr22, CEU+YRI)
+8. Usage: bin/pythonScripts/Test_Local_Ancestry_Inference_ASW_from_3Pops.py \
+                       --reference_filename ${admixed_allele_vcf} --all_admix_filename ${all_admixture_Q} --chrom_admix_filename ${chrom_admixture_Q} --test_filename {genetic_info_tsv_file} \
+                       --num_test ${num_test_ids} \
+                       --kmer ${window_size} --num_windows ${num_sliding_windows} --seed {random_seed}
+
+This is the STRUCTUREPainter script, which processes the data generated previously in the pipeline. Run the local ancestry method which selects ancestry informative SNPs, estimates the transition + emission matrices, and iterates through the Hidden Markov Model (HMM).
+
+    Script arguments:
+    Required Arguments:
+        - `reference_filename` (admixed_allele_vcf) - path to file that contains training set - ALLELE_vcf.txt from pops_data/admixed folder.
+        - `all_admix_filename` (all_admixture_Q) - path to overall admix filename - admixture output .Q file from pops_data/admixture folder. This needs to be a combined Q file for all 22 autosomal chromosomes.
+        - `chrom_admix_filename` (chrom_admixture_Q) - path to admix filename for this chromosome - admixture output .Q from pops_data/admixture folder
+        - `test_filename` (genetic_info_tsv_file) - path to file that contains chromosomes for which ancestry should be inferred - ALLELE.vxf.tx tsv from test_input folder
+    Optional Arguments:
+        - `num_test` (num_test_ids)- number of test chromosomes to evaluate (**default == -1 (which means all)**)
+        - `kmer` (window_size) - Window size to use. This is also used as the number of sliding windows (**default 5**)
+        - `num_windows` (num_sliding_windows) - number of sliding windows to use. If not specified, the value for kmer is used (**default 5**)
+                        Number of ways to split each chromosome into windows. If specified, should be less than or equal to `kmer`.
+                        Another way to think about what this parameter means: for each SNP, how many calls do you want to make and then average together to determine ancestry? `num_windows` exactly determines this.
+                        Using values other than `kmer` is mostly untested right now.
+                        Note that approximately, runtime should scale linearly with each of `kmer` and `num_windows`.
+        - `seed` (random_seed) - Any number to be used to seed the random number generator (**default 0**)
+                                 Set to `None` for irreproducible results (varying randomly from run to run), or to a different integer value to see a different set of results that will be the same from run to run.
+
+    Script runtime for Chr22: about xx minutes
+
+    - Output data:
+        - The output file is created in the results folder, which will be used by evaluate_inferences.py to generate the ancestry plot. 
     
-    - Currently, the argument takes an "all_admixture_filename" is being passed the Q file of only chromosome 22 from
-       create_all_admixed_chromosomes.sh. This needs to be a combined Q file for all 22 autosomal chromosomes.
-        # @Todo The logic for passing a combined 22 chromsome VCF file to ADMIXTURE needs to happen 
-7. `evaluate_inferences.py` will plot the results of STRUCTUREpainter against the true ancestry values for the test set of chromosomes. See `evaluate_inferences.sh` for sample parameters. The Python script only requires two files, containing true and inferred ancestry, as well as a path for the plot that will be produced and saved.
+    @ToDo Generate the input file arguments within the script using known information (chromsome number and populations) and known directory structure like previous scripts.
+    @Todo The logic for passing a combined 22 chromsome VCF file to ADMIXTURE needs to happen 
+    
+9. Usage: `evaluate_inferences.py` --inferences_filename ${STRUCTUREPainter_output) --true_ancestry_filename (ancestry_information_csv) --save_plot_filename (output_png_file)
 
-#### 2018 TODOs ####
-- Right now the transition matrix is based on population-level ancestry proportions, so the transition matrix is the same for each individual. It would probably be more accurate if the transition matrix is calculated for each individual based on that individual's estimated ancestry proportions (estimated using ADMIXTURE). Currently, STRUCTUREpainter only expects the results of ADMIXTURE on the training set, not on the evaluation set ("canvas" set?), which means that this is not a trivial change.
+Will plot the results of STRUCTUREpainter against the true ancestry values for the test set of chromosomes.
 
-#### Local Ancestry Inference ####
-- Run the local ancestry method which selects ancestry informative SNPs, estimates the transition + emission matrices, and iterates through the Hidden Markov Model (HMM).
-- Optional input parameters:
-	- `--kmer` (int, default = 5): window size to use
-	- `--num_windows` (int, default = same as kmer): number of ways to split each chromosome into windows. If not specified, the value for `kmer` will be used. If specified, should be less than or equal to `kmer`.
-		- Another way to think about what this parameter means: for each SNP, how many calls do you want to make and then average together to determine ancestry? `num_windows` exactly determines this.
-		- Using values other than `kmer` is mostly untested right now.
-		- Note that approximately, runtime should scale linearly with each of `kmer` and `num_windows`.
-	- `--seed` (int, default = 0): random seed to use. Since the default value is an int (not Python's `None`), results will be exactly the same from run to run. Set to `None` for irreproducible results (varying randomly from run to run), or to a different integer value to see a different set of results that will be the same from run to run.
-	- `--num_test` (int, default = -1): Number of test chromosomes (from the supplied test set, detailed below) to paint. If -1 (the default value), paints all test chromosomes from the test set.
-- Required input parameters:
-	- `--reference_filename` (string): path to file that contains training set
-	- `--all_admix_filename` (string): path to overall admix filename
-	- `--chrom_admix_filename` (string): path to admix filename for this chromosome
-	- `--test_filename` (string): path to file that contains chromosomes for which ancestry should be inferred
+    Script arguments:
+        Required Arguments:
+            - `inferences_filename` (STRUCTUREPainter_output) - Output of StructurePainter from the results/ folder.
+            - `true_ancestry_filename` (ancestry_information_csv) - csv containing true ancestry information from the test_input folder e.g. CEU_YRI_5true_population.csv.
+        Optional Arguments:
+            - `save_plot_filename` (output_png_file) - name to use for plot that will be generated (if not specified, plot will be shown instead of saved).
 
 
-#### Data Sources ####
-- The file popgen/pops_for_sample_IDs.tsv can be downloaded from http://www.internationalgenome.org/data-portal/sample . Select the populations of interest (YRI, CEU and ASW) from the checkboxes, and then select the option to "Download the list" at the top of the page.
-	- Rename the file as pops_for_sample_IDs.tsv
-- The input data files for the vcftools command can be downloaded from http://hgdownload.cse.ucsc.edu/gbdb/hg19/1000Genomes/phase3/ or ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/
-    - As mentioned on this page, the VCF files produced by the final phase of the 1000 Genomes Project (phase 3) are phased (http://www.internationalgenome.org/faq/are-1000-genomes-variant-calls-phased/)
+        ----Stopped here when editing Readme--------
 
 #### Example running individual scripts ####
     - example usage `python ./bin/pythonScripts/write_sample_IDs.py SampleIDs/igsr_samples.tsv ASW CEU YRI`
@@ -266,6 +323,15 @@ ALL scripts below must be run from the top level `popgen` folder
                 e.g. HG00318   HG00319    HH00320
                 Each of these files has the sample IDs across a specific population, written as a haploid ( _1 and _2):
                  e.g. HG00318_1    HG00318_2     HG00319_1     HG00319_2
+
+#### 2018 TODOs ####
+- Right now the transition matrix is based on population-level ancestry proportions, so the transition matrix is the same for each individual. It would probably be more accurate if the transition matrix is calculated for each individual based on that individual's estimated ancestry proportions (estimated using ADMIXTURE). Currently, STRUCTUREpainter only expects the results of ADMIXTURE on the training set, not on the evaluation set ("canvas" set?), which means that this is not a trivial change.
+
+#### Data Sources ####
+- The file popgen/pops_for_sample_IDs.tsv can be downloaded from http://www.internationalgenome.org/data-portal/sample . Select the populations of interest (YRI, CEU and ASW) from the checkboxes, and then select the option to "Download the list" at the top of the page.
+	- Rename the file as pops_for_sample_IDs.tsv
+- The input data files for the vcftools command can be downloaded from http://hgdownload.cse.ucsc.edu/gbdb/hg19/1000Genomes/phase3/ or ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/
+    - As mentioned on this page, the VCF files produced by the final phase of the 1000 Genomes Project (phase 3) are phased (http://www.internationalgenome.org/faq/are-1000-genomes-variant-calls-phased/)
 
 
 3. Select out populations of interest: ASW, CEU, and YRI.

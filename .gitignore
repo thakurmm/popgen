@@ -1,6 +1,5 @@
 .idea
 data/vcf
-pops_data
 popgen_plots
 test_input
 .DS_Store
@@ -8,3 +7,7 @@ run_pipeline.err*
 run_pipeline.log*
 *~
 bin/pythonScripts/__pycache__/*
+SampleIDs/*.txt
+pops_data
+results
+README_old.md
