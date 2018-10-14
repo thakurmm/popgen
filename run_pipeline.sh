@@ -19,8 +19,8 @@ sample_ids_file="SampleIDs/igsr_samples.tsv"
 num_admixed_array=(5)
 num_pure_array=(200)
 num_array_elems=${#num_admixed_array[@]}
-num_recombinations=0
-recombination_rate=0.00000001
+num_recombinations=3
+recombination_rate=0.001
 
 
 ## Main starts here
@@ -113,8 +113,8 @@ do
 		--all_admix_filename pops_data/admixture/${prefix}.2.Q \
 		--chrom_admix_filename pops_data/admixture/${prefix}.2.Q \
 		--num_test $num_test_ids \
-		--test_filename test_input/${pure_pop1}_${pure_pop2}_${num_admixed}test_SNPs_ALLELE_vcf.txt >> $logf 2>> $errf \
-		--recombination_rate $recombination_rate
+		--recombination_rate $recombination_rate \
+		--test_filename test_input/${pure_pop1}_${pure_pop2}_${num_admixed}test_SNPs_ALLELE_vcf.txt >> $logf 2>> $errf
 	
 	#./test_ancestry.sh >> $logf 2>> $errf
 	echo "$(date): test_ancestry.sh done" | tee -a $logf >> $errf
